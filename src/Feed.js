@@ -1,20 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default class UserProfile extends React.Component {
+export default class Feed extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam('name', 'User');
     return {
-      title: `${name}'s profile`
+      title: `Feed`
     };
   };
 
   render () {
-    const name = this.props.navigation.getParam('name', 'user');
     return (
       <View style={styles.container}>
-        <Text>UserProfile Screen</Text>
-        <Text>Welcome, {name}</Text>
+        <Text>A feed of most recent items to correct</Text>
       </View>
     );
   }

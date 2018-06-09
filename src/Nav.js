@@ -1,24 +1,40 @@
 import React from 'react';
-import { createStackNavigator } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Home from './Home';
-import UserProfile from './UserProfile';
+import Record from './Record';
+import Feed from './Feed';
+import Settings from './Settings';
+import MyRecordings from './MyRecordings';
 
-export default createStackNavigator(
+export default createBottomTabNavigator(
   {
-    Home,
-    UserProfile
+    Feed: Feed,
+    Practice: Record,
+    Recordings: MyRecordings,
+    Settings: Settings
   },
   {
-    initialRouteName: 'Home',
-    navigationOptions: {
-      headerStyle: {
-        backgroundColor: 'salmon',
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Feed') {
+          iconName = 'home';
+        } else if (routeName === 'Settings') {
+          iconName = 'cogs';
+        } else if (routeName === 'Practice') {
+          iconName = 'microphone';
+        } else if (routeName === 'Recordings') {
+          iconName = 'list-ul';
+        }
+        return <Icon name={iconName} size={25} color={tintColor} />;
       },
-      headerTintColor: '#000',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
-    }
+    }),
+    tabBarOptions: {
+      activeTintColor: 'tomato',
+      inactiveTintColor: 'gray',
+    },
   }
 );
