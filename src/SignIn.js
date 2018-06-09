@@ -1,15 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
-export default class Home extends React.Component {
+export default class SignIn extends React.Component {
   render () {
     return (
       <View style={styles.container}>
-        <Text>Home Screen</Text>
+        <Text>Sign in</Text>
       </View>
     );
   }
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -18,4 +18,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1
   }
-})
+});
