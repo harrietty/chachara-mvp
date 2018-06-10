@@ -1,38 +1,20 @@
 import React from 'react';
-import { createStore } from 'redux';
-import { Provider, connect } from 'react-redux';
-import { Font } from 'expo';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 
-import Nav from './src/Nav';
-import AuthNav from './src/auth/AuthNav';
+import Main from './src/Main';
 
-const store = createStore((state, action) => {});
+import reducer from './src/reducers'
 
-export default class App extends React.Component {
-  state = {
-    signedIn: true,
-    fontLoaded: false
-  }
+const store = createStore(reducer, applyMiddleware(thunk));
 
-  async componentDidMount() {
-    await Font.loadAsync({
-      'feather': require('./assets/Fonts/FontAwesome.ttf'),
-    });
-    this.setState({
-      fontLoaded: true
-    });
-  }
-
-  render() {
-    const { signedIn, fontLoaded } = this.state;
-    if (fontLoaded) {
-      return (
-        <Provider store={store}>
-          {signedIn ? <Nav /> : <AuthNav />}
-        </Provider>
-      );
-    } else {
-      return null;
-    }
+export default class ProvidedApp extends React.Component {
+  render () {
+    return (
+      <Provider store={store}>
+        <Main />
+      </Provider>
+    )
   }
 }
