@@ -31,6 +31,24 @@ export const signUp = (email, password, username) => {
   }
 }
 
+export const signIn = (username, password) => {
+  return (dispatch) => {
+    dispatch(signInRequest());
+    return Auth.signIn(username, password)
+      .then((res) => {
+        // TODO: decide how to use this
+        const token = res.signInUserSession.accessToken.jwtToken;
+        const user = res.signInUserSession.idToken.payload;
+        const awaitingConfirmation = !user.email_verified;
+        dispatch(signInSuccess(user, awaitingConfirmation));
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(signInFailure(err.message));
+      })
+  };
+};
+
 export const confirmSignUpSuccess = () => ({
   type: types.CONFIRM_SIGNUP_SUCCESS
 });
@@ -52,10 +70,25 @@ export const confirmSignUp = (username, code) => {
   }
 };
 
-const signIn = (user) => {
+const signInSuccess = (user, confirmed) => {
   return {
-    type: types.SIGN_IN,
+    type: types.SIGN_IN_SUCCESS,
+    payload: {
+      user, confirmed
+    }
+  };
+};
+
+const signInFailure = (err) => {
+  return {
+    type: types.SIGN_IN_FAILURE,
     payload: user
+  };
+};
+
+const signInRequest = () => {
+  return {
+    type: types.SIGN_IN_REQUEST,
   };
 };
 

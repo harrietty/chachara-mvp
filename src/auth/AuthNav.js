@@ -6,6 +6,6 @@ import SignUpStack from './SignUpStack';
 import Confirm from './Confirm';
 
 export default createBottomTabNavigator({
+  SignIn: SignIn,
   SignUp: SignUpStack,
-  SignIn: SignIn
 });

@@ -52,5 +52,16 @@ export default (state = initialState, action = {}) => {
     };
   }
 
+  if (action.type === types.SIGN_IN_SUCCESS) {
+    return {
+      ...state,
+      loading: false,
+      error: null,
+      user: action.payload.user,
+      action: action.payload.awaitingConfirmation,
+      signedIn: true
+    };
+  }
+
   return state;
 };
