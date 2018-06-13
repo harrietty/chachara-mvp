@@ -4,6 +4,19 @@ import * as types from './types';
 
 Amplify.configure(awsExports);
 
+export const signUp = (email, password, username) => {
+  return (dispatch) => {
+    dispatch(signUpRequest())
+    return Auth.signUp({ username, password, attributes: { email } })
+      .then(({ user }) => {
+        dispatch(signUpSuccess(user));
+      })
+      .catch((err) => {
+        dispatch(signUpFailure(err.message))
+      });
+  }
+}
+
 export const signUpRequest = () => ({
   type: types.SIGN_UP_REQUEST
 });
@@ -18,18 +31,31 @@ export const signUpFailure = (err) => ({
   payload: err
 });
 
-export const signUp = (email, password, username) => {
+export const signOut = () => {
   return (dispatch) => {
-    dispatch(signUpRequest())
-    return Auth.signUp({ username, password, attributes: { email } })
-      .then(({ user }) => {
-        dispatch(signUpSuccess(user));
+    dispatch(signOutRequest());
+    return Auth.signOut()
+      .then(() => {
+        dispatch(signOutSuccess());
       })
       .catch((err) => {
-        dispatch(signUpFailure(err.message))
+        dispatch(signOutFailure(err));
       });
-  }
+  };
 }
+
+export const signOutRequest = () => ({
+  type: types.SIGN_OUT_REQUEST
+});
+
+export const signOutSuccess = () => ({
+  type: types.SIGN_OUT_SUCCESS,
+});
+
+export const signOutFailure = (err) => ({
+  type: types.SIGN_OUT_FAILURE,
+  payload: err
+});
 
 export const signIn = (username, password) => {
   return (dispatch) => {
@@ -49,25 +75,10 @@ export const signIn = (username, password) => {
   };
 };
 
-export const confirmSignUpSuccess = () => ({
-  type: types.CONFIRM_SIGNUP_SUCCESS
-});
-
-export const confirmSignUpFailure = (err) => ({
-  type: types.CONFIRM_SIGNUP_FAILURE,
-  payload: err
-});
-
-export const confirmSignUp = (username, code) => {
-  return (dispatch) => {
-    return Auth.confirmSignUp(username, code)
-      .then((res) => {
-        dispatch(confirmSignUpSuccess())
-      })
-      .catch((err) => {
-        dispatch(confirmSignUpFailure(err.message));
-      });
-  }
+const signInRequest = () => {
+  return {
+    type: types.SIGN_IN_REQUEST,
+  };
 };
 
 const signInSuccess = (user, confirmed) => {
@@ -86,26 +97,35 @@ const signInFailure = (err) => {
   };
 };
 
-const signInRequest = () => {
-  return {
-    type: types.SIGN_IN_REQUEST,
-  };
-};
-
-const signOut = () => {
-  return {
-    type: types.SIGN_OUT
-  };
-};
-
 export const currentAuthenticatedUser = () => {
   return (dispatch) => {
     Auth.currentAuthenticatedUser()
-      .then((user) => {
-        dispatch(signIn(user))
-      })
-      .catch((err) => {
-        dispatch(signOut());
-      });
+    .then((user) => {
+      console.log(user)
+    })
+    .catch((err) => {
+      console.log(err)
+    });
   }
 }
+
+export const confirmSignUp = (username, code) => {
+  return (dispatch) => {
+    return Auth.confirmSignUp(username, code)
+      .then((res) => {
+        dispatch(confirmSignUpSuccess())
+      })
+      .catch((err) => {
+        dispatch(confirmSignUpFailure(err.message));
+      });
+  }
+};
+
+export const confirmSignUpSuccess = () => ({
+  type: types.CONFIRM_SIGNUP_SUCCESS
+});
+
+export const confirmSignUpFailure = (err) => ({
+  type: types.CONFIRM_SIGNUP_FAILURE,
+  payload: err
+});

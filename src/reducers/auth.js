@@ -36,6 +36,7 @@ export default (state = initialState, action = {}) => {
     return {
       ...state,
       loading: false,
+      signedIn: true,
       awaitingConfirmation: true,
       user: action.payload,
       error: null
@@ -49,6 +50,32 @@ export default (state = initialState, action = {}) => {
       error: action.payload,
       user: null,
       awaitingConfirmation: false
+    };
+  }
+
+  if (action.type === types.SIGN_OUT_REQUEST) {
+    return {
+      ...state,
+      loading: true
+    };
+  }
+
+  if (action.type === types.SIGN_OUT_SUCCESS) {
+    return {
+      ...state,
+      loading: false,
+      signedIn: false,
+      user: null,
+      error: null,
+      awaitingConfirmation: false
+    };
+  }
+
+  if (action.type === types.SIGN_OUT_FAILURE) {
+    return {
+      ...state,
+      loading: false,
+      error: action.payload,
     };
   }
 
