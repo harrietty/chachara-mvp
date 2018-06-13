@@ -24,11 +24,10 @@ class Main extends React.Component {
   }
 
   render() {
-    console.log(this.state, this.props)
     const { fontLoaded } = this.state;
     const { signedIn, awaitingConfirmation, userLoading } = this.props;
     if (fontLoaded) {
-      if (awaitingConfirmation) return <AuthNav />;
+      if (awaitingConfirmation || !signedIn) return <AuthNav />;
       else if (signedIn) return <Nav />
       else if (userLoading) return <Text>Loading</Text>;
       else return null;
