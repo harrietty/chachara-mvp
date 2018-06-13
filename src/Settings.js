@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import SignOutButton from './reusable/SignOutButton';
+
 export default class UserProfile extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam('name', 'User');
@@ -15,6 +17,7 @@ export default class UserProfile extends React.Component {
       <View style={styles.container}>
         <Text>UserProfile Screen</Text>
         <Text>Welcome, {name}</Text>
+        <SignOutButton />
       </View>
     );
   }

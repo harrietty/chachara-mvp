@@ -111,5 +111,38 @@ describe('reducers', () => {
         user: null
       });
     });
+
+    test('receiving action SIGN_IN_REQUEST', () => {
+      const action = actions.signInRequest();
+      expect(auth(initialState, action)).toEqual({
+        signedIn: false,
+        loading: true,
+        awaitingConfirmation: false,
+        error: null,
+        user: null
+      });
+    });
+
+    test('receiving action SIGN_IN_FAILURE', () => {
+      const action = actions.signInFailure('oh no');
+      expect(auth(initialState, action)).toEqual({
+        signedIn: false,
+        loading: false,
+        awaitingConfirmation: false,
+        error: 'oh no',
+        user: null
+      });
+    });
+    
+    test('receiving action SIGN_IN_SUCCESS', () => {
+      const action = actions.signInSuccess('harriet', true);
+      expect(auth(initialState, action)).toEqual({
+        signedIn: true,
+        loading: false,
+        awaitingConfirmation: false,
+        error: null,
+        user: 'harriet'
+      });
+    });
   });
 });

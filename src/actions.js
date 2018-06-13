@@ -75,13 +75,13 @@ export const signIn = (username, password) => {
   };
 };
 
-const signInRequest = () => {
+export const signInRequest = () => {
   return {
     type: types.SIGN_IN_REQUEST,
   };
 };
 
-const signInSuccess = (user, confirmed) => {
+export const signInSuccess = (user, confirmed) => {
   return {
     type: types.SIGN_IN_SUCCESS,
     payload: {
@@ -90,10 +90,10 @@ const signInSuccess = (user, confirmed) => {
   };
 };
 
-const signInFailure = (err) => {
+export const signInFailure = (err) => {
   return {
     type: types.SIGN_IN_FAILURE,
-    payload: user
+    payload: err
   };
 };
 

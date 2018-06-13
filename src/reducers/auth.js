@@ -96,10 +96,22 @@ export default (state = initialState, action = {}) => {
       loading: false,
       error: null,
       user: action.payload.user,
-      awaitingConfirmation: !!action.payload.confirmed,
+      awaitingConfirmation: !action.payload.confirmed,
       signedIn: true
     };
   }
+
+  if (action.type === types.SIGN_IN_FAILURE) {
+    return {
+      ...state,
+      loading: false,
+      error: action.payload,
+      user: null,
+      awaitingConfirmation: false,
+      signedIn: false
+    };
+  }
+
 
   return state;
 };
