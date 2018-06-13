@@ -26,7 +26,7 @@ describe('reducers', () => {
     test('receiving action SIGN_UP_SUCCESS', () => {
       const action = actions.signUpSuccess({username: 'harriet'});
       expect(auth(initialState, action)).toEqual({
-        signedIn: false,
+        signedIn: true,
         loading: false,
         awaitingConfirmation: true,
         error: null,
@@ -42,6 +42,51 @@ describe('reducers', () => {
         awaitingConfirmation: false,
         error: 'oh no',
         user: null
+      });
+    });
+
+    test('receiving action SIGN_OUT_REQUEST', () => {
+      const action1 = actions.signUpSuccess({username: 'harriet'});
+      const state2 = auth(initialState, action1);
+      const action2 = actions.signOutRequest();
+      const state3 = auth(state2, action2);
+
+      expect(state3).toEqual({
+        signedIn: true,
+        loading: true,
+        awaitingConfirmation: true,
+        error: null,
+        user: {username: 'harriet'}
+      });
+    });
+
+    test('receiving action SIGN_OUT_SUCCESS', () => {
+      const action1 = actions.signUpSuccess({username: 'harriet'});
+      const state2 = auth(initialState, action1);
+      const action2 = actions.signOutSuccess();
+      const state3 = auth(state2, action2);
+
+      expect(state3).toEqual({
+        signedIn: false,
+        loading: false,
+        awaitingConfirmation: false,
+        error: null,
+        user: null,
+      });
+    });
+
+    test('receiving action SIGN_OUT_FAILURE', () => {
+      const action1 = actions.signUpSuccess({username: 'harriet'});
+      const state2 = auth(initialState, action1);
+      const action2 = actions.signOutFailure('oh no');
+      const state3 = auth(state2, action2);
+
+      expect(state3).toEqual({
+        signedIn: true,
+        loading: false,
+        awaitingConfirmation: true,
+        error: 'oh no',
+        user: {username: 'harriet'},
       });
     });
     

@@ -20,10 +20,10 @@ class Main extends React.Component {
 
   render() {
     const { fontLoaded } = this.state;
-    const { signedIn } = this.props;
+    const { signedIn, awaitingConfirmation } = this.props;
     if (fontLoaded) {
       return (
-        signedIn ? <Nav /> : <AuthNav />
+        signedIn && !awaitingConfirmation ? <Nav /> : <AuthNav />
       );
     } else {
       return null;
@@ -33,7 +33,8 @@ class Main extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    signedIn: state.auth.signedIn
+    signedIn: state.auth.signedIn,
+    awaitingConfirmation: state.auth.awaitingConfirmation,
   }
 }
 
