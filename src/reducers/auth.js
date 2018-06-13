@@ -79,13 +79,24 @@ export default (state = initialState, action = {}) => {
     };
   }
 
+  if (action.type === types.SIGN_IN_REQUEST) {
+    return {
+      ...state,
+      loading: true,
+      error: null,
+      user: null,
+      signedIn: false
+    };
+  }
+
+
   if (action.type === types.SIGN_IN_SUCCESS) {
     return {
       ...state,
       loading: false,
       error: null,
       user: action.payload.user,
-      action: action.payload.awaitingConfirmation,
+      awaitingConfirmation: !!action.payload.confirmed,
       signedIn: true
     };
   }

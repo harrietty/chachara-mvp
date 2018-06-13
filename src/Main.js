@@ -1,8 +1,11 @@
 import React from 'react';
+import { ActivityIndicator, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Font } from 'expo';
 import Nav from './Nav';
 import AuthNav from './auth/AuthNav';
+
+import {checkForAuthenticatedUser} from './actions';
 
 class Main extends React.Component {
   state = {
@@ -10,6 +13,8 @@ class Main extends React.Component {
   }
 
   async componentDidMount() {
+    this.props.checkForAuthenticatedUser();
+
     await Font.loadAsync({
       'feather': require('../assets/Fonts/FontAwesome.ttf'),
     });
@@ -19,14 +24,16 @@ class Main extends React.Component {
   }
 
   render() {
+    console.log(this.state, this.props)
     const { fontLoaded } = this.state;
-    const { signedIn, awaitingConfirmation } = this.props;
+    const { signedIn, awaitingConfirmation, userLoading } = this.props;
     if (fontLoaded) {
-      return (
-        signedIn && !awaitingConfirmation ? <Nav /> : <AuthNav />
-      );
+      if (awaitingConfirmation) return <AuthNav />;
+      else if (signedIn) return <Nav />
+      else if (userLoading) return <Text>Loading</Text>;
+      else return null;
     } else {
-      return null;
+      return <Text>Loading</Text>;
     }
   }
 }
@@ -34,8 +41,17 @@ class Main extends React.Component {
 const mapStateToProps = (state) => {
   return {
     signedIn: state.auth.signedIn,
+    userLoading: state.auth.loading,
     awaitingConfirmation: state.auth.awaitingConfirmation,
   }
 }
 
-export default connect(mapStateToProps)(Main);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    checkForAuthenticatedUser: () => {
+      dispatch(checkForAuthenticatedUser());
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

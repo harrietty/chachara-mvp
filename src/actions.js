@@ -97,14 +97,16 @@ const signInFailure = (err) => {
   };
 };
 
-export const currentAuthenticatedUser = () => {
+export const checkForAuthenticatedUser = () => {
   return (dispatch) => {
+    dispatch(signInRequest());
     Auth.currentAuthenticatedUser()
     .then((user) => {
-      console.log(user)
+      dispatch(signInSuccess(user))
     })
     .catch((err) => {
-      console.log(err)
+      console.log(err);
+      // TODO: handle
     });
   }
 }
