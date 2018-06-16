@@ -20,6 +20,12 @@ class SignIn extends React.Component {
     this.props.signIn(this.state.username, this.state.password);
   }
 
+  renderSignInError () {
+    return (<Text>
+      {this.props.error}
+    </Text>)
+  }
+
   render () {
     return (
       <View style={styles.container}>
@@ -35,7 +41,7 @@ class SignIn extends React.Component {
           placeholder="Password"
           onChangeText={this.handleInputChange('password')}
         />
-
+        {this.props.error && this.renderSignInError()}
         <Button 
           title='Sign in'
           onPress={this.handleSignIn}

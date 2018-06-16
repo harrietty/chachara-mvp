@@ -69,7 +69,6 @@ export const signIn = (username, password) => {
         dispatch(signInSuccess(user, awaitingConfirmation));
       })
       .catch((err) => {
-        console.log(err);
         dispatch(signInFailure(err.message));
       })
   };
