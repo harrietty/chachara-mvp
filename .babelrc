@@ -3,6 +3,11 @@
   "env": {
     "development": {
       "plugins": ["transform-react-jsx-source"]
+    },
+    "env": {
+    "test": {
+      "presets": ["env"]
+      }
     }
   }
 }

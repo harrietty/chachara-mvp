@@ -1,21 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Text } from 'react-native';
-import { connect } from 'react-redux';
 import { Font } from 'expo';
-import Nav from './Nav';
-import AuthNav from './auth/AuthNav';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { connect } from 'react-redux';
 
-import {checkForAuthenticatedUser} from './actions';
+import { checkForAuthenticatedUser } from './actions/auth.actions';
+import AuthNav from './auth/AuthNav';
+import Spinner from './reusable/Spinner';
+import Nav from './Nav';
 
 class Main extends React.Component {
-  static propTypes = {
-    checkForAuthenticatedUser: PropTypes.func.isRequired,
-    signedIn: PropTypes.bool.isRequired,
-    awaitingConfirmation: PropTypes.bool.isRequired,
-    userLoading: PropTypes.bool.isRequired,
-  }
-
   state = {
     fontLoaded: false
   }
@@ -33,23 +26,27 @@ class Main extends React.Component {
 
   render() {
     const { fontLoaded } = this.state;
-    const { signedIn, awaitingConfirmation, userLoading } = this.props;
+    const { signedIn, userConfirmed } = this.props;
     if (fontLoaded) {
-      if (awaitingConfirmation || !signedIn) return <AuthNav />;
+      if (userConfirmed === false || !signedIn) return <AuthNav />;
       else if (signedIn) return <Nav />;
-      else if (userLoading) return <Text>Loading</Text>;
       else return null;
     } else {
-      return <Text>Loading</Text>;
+      return <Spinner />;
     }
+  }
+  
+  static propTypes = {
+    checkForAuthenticatedUser: PropTypes.func.isRequired,
+    signedIn: PropTypes.bool.isRequired,
+    userConfirmed: PropTypes.bool,
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ auth }) => {
   return {
-    signedIn: state.auth.signedIn,
-    userLoading: state.auth.loading,
-    awaitingConfirmation: state.auth.awaitingConfirmation,
+    signedIn: auth.signedIn,
+    userConfirmed: auth.userConfirmed,
   };
 };
 

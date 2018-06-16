@@ -1,45 +1,95 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React from 'react';
+import { Text, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
-import { confirmSignUp } from '../actions';
+
+import { confirmSignUp, updateConfirmForm } from '../actions/auth.actions';
+import Button from '../reusable/Button';
+import SignOutButton from '../reusable/SignOutButton';
+import TextLink from '../reusable/TextLink';
+import Spinner from '../reusable/Spinner';
+
+import common from '../styles/common';
 
 class Confirm extends React.Component {
-  state = {
-    code: ''
-  };
+  componentDidMount() {
+    const username = this.props.navigation.getParam('username') || '';
+    this.setState({ username });
+  }
 
-  handleChange = (code) => {
-    this.setState({code});
+  handleChange = (key) => (value) => {
+    if (key === 'username') value = value.toLowerCase();
+    this.setState({ [key]: value });
   }
   
   confirm = () => {
-    const username = this.props.navigation.getParam('username');
-    this.props.confirmSignUp(username, this.state.code);
+    const {username, code, password, previouslyEnteredUsername} = this.props;
+    const uname = username || previouslyEnteredUsername;
+    this.props.confirmSignUp(uname, code, password);
   }
 
   goBack = () => {
     this.props.navigation.goBack();
   }
 
-  renderError = () => {
+  goToSignIn = () => {
+    this.props.navigation.navigate({
+      routeName: 'SignIn',
+    });
+  }
+
+  signInAgain = () => {
     return (
-      <Text>{this.props.error}</Text>
+      <View style={common.container}>
+        <Text style={common.header}>
+          User confirmed. Please sign in again.
+        </Text>
+        <Button _onPressButton={this.goToSignIn}>
+          Go to sign in
+        </Button>
+      </View>
     );
   }
 
+  // TODO: make sure errors disappear when moving between pages
   render () {
-    return (
-      <View style={styles.container}>
-        <Text>Please paste the code we have emailed you:</Text>
+    console.log('confirm rendering', this.props);
+    const {previouslyEnteredUsername, code, username, loading, error } = this.props;
+    const uname = previouslyEnteredUsername || username;
+    if (error === 'Incorrect username or password.') return this.signInAgain();
+    else if (loading) return <Spinner />;
+    else return (
+      <View style={common.container}>
+        <Text style={common.header}>
+          Please paste the code we have emailed you:
+        </Text>
+
+        <Text style={common.inputLabel}>Username:</Text>
         <TextInput
-          style={styles.input}
-          placeholder='######'
-          onChangeText={this.handleChange}
+          style={common.input}
+          placeholder='User Name'
+          onChangeText={this.props.updateConfirmForm('username')}
+          value={uname}
         />
-        {this.props.error && this.renderError()}
-        <Button title='Confirm' onPress={this.confirm} />
-        <Button title='back to signup' onPress={this.goBack} />
+
+        <Text style={common.inputLabel}>Confirmation code:</Text>
+        <TextInput
+          style={common.input}
+          placeholder='Confirmation Code'
+          onChangeText={this.props.updateConfirmForm('code')}
+          value={code}
+        />
+
+        {error && <Text style={common.error}>{error}</Text>}
+        <Button _onPressButton={this.confirm}>
+          Confirm
+        </Button>
+        <TextLink onPress={this.goBack}>
+          Back to sign up
+        </TextLink>
+        
+        {/* FOR DEVELOPMENT */}
+        <SignOutButton/>
       </View>
     );
   }
@@ -47,36 +97,31 @@ class Confirm extends React.Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     confirmSignUp: PropTypes.func.isRequired,
-    error: PropTypes.object.isRequired
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.string,
+    username: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+    code: PropTypes.string.isRequired,
+    previouslyEnteredUsername: PropTypes.string.isRequired,
+    updateConfirmForm: PropTypes.func.isRequired,
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'pink',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
-  },
-  input: {
-    height: 40,
-    fontSize: 18,
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 3,
-    margin: 3,
-    width: 300,
-    backgroundColor: 'white'
-  }
-});
-
-const mapStateToProps = (state) => ({
-  error: state.auth.error
+const mapStateToProps = ({signUp, signIn, confirm}) => ({
+  error: confirm.error,
+  loading: confirm.loading,
+  previouslyEnteredUsername: signIn.username || signUp.username,
+  code: confirm.code,
+  username: confirm.username,
+  password: signIn.password || signUp.password,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  confirmSignUp: (username, code) => {
-    dispatch(confirmSignUp(username, code));
+  confirmSignUp: (username, code, password) => {
+    dispatch(confirmSignUp(username, code, password));
+  },
+  updateConfirmForm: (key) => (value) => {
+    dispatch(updateConfirmForm(key, value));
   }
 });
 
