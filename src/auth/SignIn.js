@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
 import { connect } from 'react-redux';
 
@@ -23,7 +24,7 @@ class SignIn extends React.Component {
   renderSignInError () {
     return (<Text>
       {this.props.error}
-    </Text>)
+    </Text>);
   }
 
   render () {
@@ -49,7 +50,13 @@ class SignIn extends React.Component {
       </View>
     );
   }
-};
+
+  static propTypes = {
+    signIn: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+    error: PropTypes.object.isRequired
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -77,8 +84,8 @@ const mapStateToProps = ({ auth }) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   signIn: (username, password) => {
-    dispatch(signIn(username, password))
+    dispatch(signIn(username, password));
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

@@ -1,15 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
 import SignOutButton from './reusable/SignOutButton';
 
 export default class UserProfile extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const name = navigation.getParam('name', 'User');
+  static navigationOptions () {
     return {
-      title: 'Settings'
+      title: 'Settings',
     };
-  };
+  }
 
   render () {
     const name = this.props.navigation.getParam('name', 'user');
@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'pink',
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1
-  }
-})
+    flex: 1,
+  },
+});
+
+UserProfile.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};

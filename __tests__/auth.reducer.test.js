@@ -9,7 +9,7 @@ describe('reducers', () => {
       loading: false,
       awaitingConfirmation: false,
       error: null,
-      user: null
+      user: null,
     };
 
     test('receiving action SIGN_UP_REQUEST', () => {
@@ -19,7 +19,7 @@ describe('reducers', () => {
         loading: true,
         awaitingConfirmation: false,
         error: null,
-        user: null
+        user: null,
       });
     });
 
@@ -30,7 +30,7 @@ describe('reducers', () => {
         loading: false,
         awaitingConfirmation: true,
         error: null,
-        user: {username: 'harriet'}
+        user: {username: 'harriet'},
       });
     });
     
@@ -41,7 +41,7 @@ describe('reducers', () => {
         loading: false,
         awaitingConfirmation: false,
         error: 'oh no',
-        user: null
+        user: null,
       });
     });
 
@@ -56,7 +56,7 @@ describe('reducers', () => {
         loading: true,
         awaitingConfirmation: true,
         error: null,
-        user: {username: 'harriet'}
+        user: {username: 'harriet'},
       });
     });
 
@@ -97,7 +97,7 @@ describe('reducers', () => {
         loading: false,
         awaitingConfirmation: false,
         error: null,
-        user: null
+        user: null,
       });
     });
     
@@ -108,7 +108,7 @@ describe('reducers', () => {
         loading: false,
         awaitingConfirmation: true,
         error: 'oh no',
-        user: null
+        user: null,
       });
     });
 
@@ -119,7 +119,7 @@ describe('reducers', () => {
         loading: true,
         awaitingConfirmation: false,
         error: null,
-        user: null
+        user: null,
       });
     });
 
@@ -130,7 +130,7 @@ describe('reducers', () => {
         loading: false,
         awaitingConfirmation: false,
         error: 'oh no',
-        user: null
+        user: null,
       });
     });
     
@@ -141,7 +141,7 @@ describe('reducers', () => {
         loading: false,
         awaitingConfirmation: false,
         error: null,
-        user: 'harriet'
+        user: 'harriet',
       });
     });
   });

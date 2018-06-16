@@ -5,7 +5,7 @@ const initialState = {
   loading: false,
   awaitingConfirmation: false,
   error: null,
-  user: null
+  user: null,
 };
 
 export default (state = initialState, action = {}) => {
@@ -20,15 +20,15 @@ export default (state = initialState, action = {}) => {
       signedIn: false,
       error: action.payload,
       awaitingConfirmation: true,
-      loading: false
-    }
+      loading: false,
+    };
   }
 
   if (action.type === types.SIGN_UP_REQUEST) {
     return { 
       ...state, 
       loading: true,
-      error: null
+      error: null,
     };
   }
 
@@ -39,7 +39,7 @@ export default (state = initialState, action = {}) => {
       signedIn: true,
       awaitingConfirmation: true,
       user: action.payload,
-      error: null
+      error: null,
     };
   }
 
@@ -49,14 +49,14 @@ export default (state = initialState, action = {}) => {
       loading: false,
       error: action.payload,
       user: null,
-      awaitingConfirmation: false
+      awaitingConfirmation: false,
     };
   }
 
   if (action.type === types.SIGN_OUT_REQUEST) {
     return {
       ...state,
-      loading: true
+      loading: true,
     };
   }
 
@@ -67,7 +67,7 @@ export default (state = initialState, action = {}) => {
       signedIn: false,
       user: null,
       error: null,
-      awaitingConfirmation: false
+      awaitingConfirmation: false,
     };
   }
 
@@ -85,7 +85,7 @@ export default (state = initialState, action = {}) => {
       loading: true,
       error: null,
       user: null,
-      signedIn: false
+      signedIn: false,
     };
   }
 
@@ -97,7 +97,7 @@ export default (state = initialState, action = {}) => {
       error: null,
       user: action.payload.user,
       awaitingConfirmation: !action.payload.confirmed,
-      signedIn: true
+      signedIn: true,
     };
   }
 
@@ -108,7 +108,7 @@ export default (state = initialState, action = {}) => {
       error: action.payload,
       user: null,
       awaitingConfirmation: false,
-      signedIn: false
+      signedIn: false,
     };
   }
 

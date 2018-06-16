@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { Auth } from 'aws-amplify';
 import { connect } from 'react-redux';
 
 import { signUp } from '../actions';
@@ -12,10 +12,17 @@ class SignUp extends React.Component {
     password: '',
     confirmedPassword: ''
   }
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+    error: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+    awaitingConfirmation: PropTypes.bool.isRequired,
+    signUp: PropTypes.func.isRequired
+  }
   handleInputChange = (key) => {
     return (text) => {
       this.setState({ [key]: text });
-    }
+    };
   }
   handleSubmit = () => {
     const {email, username, password, confirmedPassword} = this.state;
@@ -32,7 +39,7 @@ class SignUp extends React.Component {
     this.props.navigation.navigate({
       routeName: 'Confirm',
       params: { username }
-    })
+    });
   }
 
   componentDidUpdate () {
@@ -44,7 +51,7 @@ class SignUp extends React.Component {
   renderSignUpError () {
     return (<Text>
       {this.props.error}
-    </Text>)
+    </Text>);
   }
 
   render () {
@@ -86,7 +93,7 @@ class SignUp extends React.Component {
       </View>
     );
   }
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -115,8 +122,8 @@ const mapStateToProps = ({ auth }) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   signUp: (email, password, username) => {
-    dispatch(signUp(email, password, username))
+    dispatch(signUp(email, password, username));
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp)
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

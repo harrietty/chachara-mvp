@@ -2,12 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default class Feed extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const name = navigation.getParam('name', 'User');
+  static navigationOptions () {
     return {
-      title: `Feed`
+      title: 'Feed',
     };
-  };
+  }
 
   render () {
     return (
@@ -23,6 +22,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'pink',
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1
-  }
-})
+    flex: 1,
+  },
+});

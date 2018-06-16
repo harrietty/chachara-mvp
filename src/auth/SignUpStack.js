@@ -1,12 +1,11 @@
-import React from 'react';
 import {createStackNavigator} from 'react-navigation';
 import SignUp from './SignUp';
 import Confirm from './Confirm';
 
 export default createStackNavigator({
   SignUp: SignUp,
-  Confirm: Confirm
+  Confirm: Confirm,
 }, {
   initialRouteName: 'SignUp',
-  headerMode: 'none'
-})
+  headerMode: 'none',
+});

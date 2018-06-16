@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+import PropTypes from 'prop-types';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { confirmSignUp } from '../actions';
 
@@ -24,7 +25,7 @@ class Confirm extends React.Component {
   renderError = () => {
     return (
       <Text>{this.props.error}</Text>
-    )
+    );
   }
 
   render () {
@@ -42,7 +43,13 @@ class Confirm extends React.Component {
       </View>
     );
   }
-};
+
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+    confirmSignUp: PropTypes.func.isRequired,
+    error: PropTypes.object.isRequired
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

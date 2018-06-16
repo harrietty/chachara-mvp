@@ -2,12 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default class UserProfile extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const name = navigation.getParam('name', 'User');
+  static navigationOptions () {
     return {
       title: 'Recordings'
     };
-  };
+  }
 
   render () {
     return (
@@ -25,4 +24,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1
   }
-})
+});

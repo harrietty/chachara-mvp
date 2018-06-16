@@ -1,7 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 export default class Home extends React.Component {
+  static propTypes = {
+    navigation: PropTypes.object.isRequired
+  }
+  
   static navigationOptions = {
     title: 'Home',
   };
@@ -26,4 +31,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1
   }
-})
+});

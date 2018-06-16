@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.9.1",
     "jest-expo": "~27.0.0",
     "proxyquire": "^2.0.1",
     "react-devtools": "^3.2.3",
@@ -17,7 +20,8 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "test": "jest",
-    "devtools": "react-devtools"
+    "devtools": "react-devtools",
+    "lint": "eslint ./"
   },
   "jest": {
     "preset": "jest-expo"
@@ -26,6 +30,7 @@
     "aws-amplify": "^0.4.4",
     "aws-amplify-react-native": "^0.2.15",
     "expo": "^27.0.2",
+    "prop-types": "^15.6.1",
     "react": "16.3.1",
     "react-native": "~0.55.2",
     "react-native-spinkit": "^1.1.1",

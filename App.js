@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 
 import Main from './src/Main';
 
-import reducer from './src/reducers'
+import reducer from './src/reducers';
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
@@ -15,6 +15,6 @@ export default class ProvidedApp extends React.Component {
       <Provider store={store}>
         <Main />
       </Provider>
-    )
+    );
   }
 }
