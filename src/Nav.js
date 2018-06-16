@@ -1,26 +1,24 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { createBottomTabNavigator } from 'react-navigation';
+import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { createBottomTabNavigator } from 'react-navigation';
+import Feed from './components/Feed';
+import MyRecordings from './components/MyRecordings';
+import Practice from './components/Practice';
+import Settings from './components/Settings';
 
-import Record from './Record';
-import Feed from './Feed';
-import Settings from './Settings';
-import MyRecordings from './MyRecordings';
+
+const iconForRoutes = {
+  'Feed': 'home',
+  'Settings': 'cogs',
+  'Practice': 'microphone',
+  'Recordings': 'list-ul'
+};
 
 const NavComponent = ({ navigation }) => {
   const IconRenderer = ({ tintColor }) => {
     const { routeName } = navigation.state;
-    let iconName;
-    if (routeName === 'Feed') {
-      iconName = 'home';
-    } else if (routeName === 'Settings') {
-      iconName = 'cogs';
-    } else if (routeName === 'Practice') {
-      iconName = 'microphone';
-    } else if (routeName === 'Recordings') {
-      iconName = 'list-ul';
-    }
+    const iconName = iconForRoutes[routeName];
     return <Icon name={iconName} size={25} color={tintColor} />;
   };
 
@@ -40,7 +38,7 @@ NavComponent.propTypes = {
 export default createBottomTabNavigator(
   {
     Feed: Feed,
-    Practice: Record,
+    Practice: Practice,
     Recordings: MyRecordings,
     Settings: Settings,
   },

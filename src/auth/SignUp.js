@@ -1,129 +1,169 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React from 'react';
+import { Text, TextInput, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 
-import { signUp } from '../actions';
+import { createSignUpError, signUp, updateSignUpForm, clearSignInError, updateSignInForm } from '../actions/auth.actions';
+import Button from '../reusable/Button';
+import TextLink from '../reusable/TextLink';
+import Spinner from '../reusable/Spinner';
+
+import common from '../styles/common';
 
 class SignUp extends React.Component {
-  state = {
-    email: '',
-    username: '',
-    password: '',
-    confirmedPassword: ''
-  }
-  static propTypes = {
-    navigation: PropTypes.object.isRequired,
-    error: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
-    awaitingConfirmation: PropTypes.bool.isRequired,
-    signUp: PropTypes.func.isRequired
-  }
-  handleInputChange = (key) => {
-    return (text) => {
-      this.setState({ [key]: text });
-    };
-  }
   handleSubmit = () => {
-    const {email, username, password, confirmedPassword} = this.state;
+    const emailRegex =/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (!email || !username || !password || !confirmedPassword) {
-      return console.log('Fields missing');
+    const {email, username, password, confirmPassword} = this.props;
+
+    if (!email || !username || !password || !confirmPassword) {
+      this.props.createSignUpError('Please complete all fields');
+    } else if (password !== confirmPassword) {
+      this.props.createSignUpError('Passwords must match');
+    } else if (!emailRegex.test(email)) {
+      this.props.createSignUpError('Invalid email address');
+    } else if (password.length < 8) {
+      this.props.createSignUpError('Passwords must be at least 8 characters');
+    } else if (!/[0-9]/.test(password) || !/[A-Z]/.test(password) || !/[a-z]/.test(password)) {
+      this.props.createSignUpError('Passwords must contain numbers, uppercase and lowercase letters');
+    } 
+    else {
+      this.props.signUp(email, password, username);
     }
-    if (password !== confirmedPassword) return console.log('Passwords don\'t match');
-    
-    this.props.signUp(email, password, username);
   }
 
   goToConfirm = (username) => {
     this.props.navigation.navigate({
       routeName: 'Confirm',
-      params: { username }
+      params: { username, password: this.props.password }
+    });
+  }
+
+  goToSignIn = () => {
+    this.props.navigation.navigate({
+      routeName: 'SignIn',
     });
   }
 
   componentDidUpdate () {
-    if (this.props.awaitingConfirmation) {
+    if (this.props.userConfirmed === false) {
       this.goToConfirm(this.props.user.username);
     }
   }
 
   renderSignUpError () {
-    return (<Text>
-      {this.props.error}
-    </Text>);
+    return (
+      <Text style={common.error}>
+        {this.props.error}
+      </Text>);
   }
 
   render () {
-    return (
-      <View style={styles.container}>
-        <Text>Sign up</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType='email-address'
-          placeholder="Email address"
-          onChangeText={this.handleInputChange('email')}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          onChangeText={this.handleInputChange('username')}
-        />
-        <TextInput
-          style={styles.input}
-          secureTextEntry
-          placeholder="Password"
-          onChangeText={this.handleInputChange('password')}
-        />
-        <TextInput
-          style={styles.input}
-          secureTextEntry
-          placeholder="Confirm password"
-          onChangeText={this.handleInputChange('confirmedPassword')}
-        />
-        
-        {this.props.error && this.renderSignUpError()}
-        
-        <Button 
-          onPress={this.handleSubmit} 
-          title='Sign Up'
-        />
-        {/* JUST SO WE JUMP TO CONFIRM PAGE FOR DEV */}
-        <Button title='confirm' onPress={() => this.goToConfirm('harrietty')} />
+    const { username, email, password, confirmPassword, loading } = this.props;
+    if (loading) return <Spinner />;
+    else return (
+      <View style={common.container}>
+        <View style={common.headerArea}>
+          <Text style={common.header}>Chachara</Text>
+          <Icon name={'ios-chatbubbles-outline'} size={55} color={common.header.color} />;
+        </View>
+        <View style={common.mainArea}>
+          <Text style={common.inputLabel}>Email address:</Text>
+          <TextInput
+            style={common.input}
+            keyboardType='email-address'
+            placeholder="Email address"
+            onChangeText={this.props.updateSignUpForm('email')}
+            value={email}
+          />
+
+          <Text style={common.inputLabel}>Username:</Text>
+          <TextInput
+            style={common.input}
+            placeholder="Username"
+            onChangeText={this.props.updateSignUpForm('username')}
+            value={username}
+          />
+
+          <Text style={common.inputLabel}>Password:</Text>
+          <TextInput
+            style={common.input}
+            secureTextEntry
+            placeholder="Password"
+            onChangeText={this.props.updateSignUpForm('password')}
+            value={password}
+          />
+
+          <Text style={common.inputLabel}>Confirm password:</Text>
+          <TextInput
+            style={common.input}
+            secureTextEntry
+            placeholder="Confirm password"
+            onChangeText={this.props.updateSignUpForm('confirmPassword')}
+            value={confirmPassword}
+          />
+
+          {this.props.error && this.renderSignUpError()}
+          
+          <Button _onPressButton={this.handleSubmit}>
+            Sign up
+          </Button>
+
+          <TextLink onPress={this.goToSignIn}>
+            Sign in instead
+          </TextLink>
+        </View>
       </View>
     );
   }
+
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+    error: PropTypes.string,
+    user: PropTypes.object,
+    userConfirmed: PropTypes.bool,
+    signUp: PropTypes.func.isRequired,
+    email: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+    loading: PropTypes.bool.isRequired,
+    confirmPassword: PropTypes.string.isRequired,
+    updateSignUpForm: PropTypes.func.isRequired,
+    createSignUpError: PropTypes.func.isRequired,
+    clearSignInError: PropTypes.func.isRequired,
+    clearSignInForm: PropTypes.func.isRequired,
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'pink',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
-  },
-  input: {
-    height: 40,
-    fontSize: 18,
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 3,
-    margin: 3,
-    width: 300,
-    backgroundColor: 'white'
-  }
-});
-
-const mapStateToProps = ({ auth }) => ({
-  awaitingConfirmation: auth.awaitingConfirmation,
+const mapStateToProps = ({ auth, signUp }) => ({
+  userConfirmed: auth.userConfirmed,
   user: auth.user,
-  error: auth.error
+  error: signUp.error,
+  username: signUp.username,
+  password: signUp.password,
+  confirmPassword: signUp.confirmPassword,
+  email: signUp.email,
+  loading: signUp.loading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   signUp: (email, password, username) => {
     dispatch(signUp(email, password, username));
-  }
+  },
+  updateSignUpForm: (key) => (value) => {
+    dispatch(updateSignUpForm(key, value));
+  },
+  createSignUpError: (err) => {
+    dispatch(createSignUpError(err));
+  },
+  clearSignInForm: () => {
+    dispatch(updateSignInForm('username', ''));
+    dispatch(updateSignInForm('password', ''));
+  },
+  clearSignInError: () => {
+    dispatch(clearSignInError());
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
