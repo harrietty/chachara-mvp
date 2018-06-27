@@ -7,7 +7,6 @@ import MyRecordings from './components/MyRecordings';
 import Practice from './components/Practice';
 import Settings from './components/Settings';
 
-
 const iconForRoutes = {
   'Feed': 'home',
   'Settings': 'cogs',

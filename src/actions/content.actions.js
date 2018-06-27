@@ -25,6 +25,34 @@ export async function downloadAudioFile(sourceUri, destinationUri) {
     .catch(console.log);
 }
 
+export const fetchQuestions = () => {
+  const LANG = 'es';
+  return dispatch => {
+    dispatch(fetchQuestionsRequest());
+    return fetch(`https://e086imwdd1.execute-api.eu-west-1.amazonaws.com/latest/languages/${LANG}/questions`)
+      .then(res => res.json())
+      .then(({questions}) => {
+        dispatch(fetchQuestionsSuccess(questions));
+      })
+      .catch(() => {
+        dispatch(fetchQuestionsError('Could not load questions'));
+      });
+  };
+};
+
+export const fetchQuestionsRequest = () => ({
+  type: types.FETCH_QUESTIONS_REQUEST
+});
+
+export const fetchQuestionsSuccess = (questions) => ({
+  type: types.FETCH_QUESTIONS_SUCCESS,
+  payload: questions
+});
+
+export const fetchQuestionsError = (err) => ({
+  type: types.FETCH_QUESTIONS_FAILURE,
+  payload: err
+});
 
 export const uploadToS3 = (buf) => {
   return (dispatch) => {

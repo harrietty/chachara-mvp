@@ -3,6 +3,9 @@ import * as types from '../types';
 const initialState = {
   isUploading: false,
   uploadStatus: null,
+  questions: [],
+  loadQuestionsError: null,
+  questionsLoading: false
 };
 
 export default (state = initialState, action) => {
@@ -27,6 +30,31 @@ export default (state = initialState, action) => {
       ...state,
       isUploading: false,
       uploadStatus: 'failure',
+    };
+  }
+
+  else if (action.type === types.FETCH_QUESTIONS_REQUEST) {
+    return {
+      ...state,
+      questionsLoading: true
+    };
+  }
+
+  else if (action.type === types.FETCH_QUESTIONS_SUCCESS) {
+    return {
+      ...state,
+      questions: action.payload,
+      loadQuestionsError: null,
+      questionsLoading: false,
+    };
+  }
+
+  else if (action.type === types.FETCH_QUESTIONS_FAILURE) {
+    return {
+      ...state,
+      questions: [],
+      loadQuestionsError: action.payload,
+      questionsLoading: false,
     };
   }
 
