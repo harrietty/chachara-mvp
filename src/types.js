@@ -1,3 +1,5 @@
+// ---------------------- Auth ---------------------------------------
+
 export const UPDATE_CONFIRM_FORM = 'UPDATE_CONFIRM_FORM';
 export const CONFIRM_SIGNUP_REQUEST = 'CONFIRM_SIGNUP_REQUEST';
 export const CONFIRM_SIGNUP_SUCCESS = 'CONFIRM_SIGNUP_SUCCESS';
@@ -35,3 +37,9 @@ export const CLEAR_SIGNUP_ERROR = 'CLEAR_SIGNUP_ERROR';
 export const CLEAR_SIGNIN_ERROR = 'CLEAR_SIGNIN_ERROR';
 export const CREATE_SIGNIN_ERROR = 'CREATE_SIGNIN_ERROR';
 export const CLEAR_CONFIRMATION_ERROR = 'CLEAR_CONFIRMATION_ERROR';
+
+// --------------------------- Content ------------------------------
+
+export const FETCH_QUESTIONS_REQUEST = 'FETCH_QUESTIONS_REQUEST';
+export const FETCH_QUESTIONS_SUCCESS = 'FETCH_QUESTIONS_SUCCESS';
+export const FETCH_QUESTIONS_FAILURE = 'FETCH_QUESTIONS_FAILURE';

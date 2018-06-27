@@ -3,16 +3,24 @@ import React from 'react';
 import {FileSystem} from 'expo';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { connect } from 'react-redux';
-import { uploadToS3, downloadAudioFile, loadAudio } from '../actions/content.actions';
+
+import { uploadToS3, downloadAudioFile, loadAudio, fetchQuestions } from '../actions/content.actions';
 import AudioRecorder from './AudioRecorder';
+import RecordButton from './RecordButton';
+import Spinner from '../reusable/Spinner';
 
 import common from '../styles/common';
+import question from '../styles/question';
 
-class Record extends React.Component {
+class Practice extends React.Component {
   static navigationOptions () {
     return {
       title: 'Practice',
     };
+  }
+
+  componentDidMount() {
+    this.props.fetchQuestions();
   }
 
   upload = (uri) => {
@@ -34,7 +42,7 @@ class Record extends React.Component {
   }
 
   render () {
-    const { uploadStatus, isUploading } = this.props;
+    const { uploadStatus, isUploading, questions, questionsLoading } = this.props;
     return (
       <View style={common.container}>
         <View style={common.inAppHeaderArea}>
@@ -42,12 +50,23 @@ class Record extends React.Component {
         </View>
         
         <View style={common.mainArea}>
-          <Text>¿Qué hay que hacer en tu pueblo/ciudad/vecindario?</Text>
+          {questionsLoading && <Spinner/>}
+          {!questionsLoading && questions.map((q, i) => {
+            return (
+              <View style={question.container} key={i}>
+                <Text style={question.text}>{q.text}</Text>);
+                <RecordButton>
+
+                </RecordButton>
+              </View>
+            );
+          })}
+          {/* <Text>¿Qué hay que hacer en tu pueblo/ciudad/vecindario?</Text>
           <AudioRecorder upload={this.upload} />
           {isUploading && <Text>Currently uploading...</Text>}
           {uploadStatus === 'failure' && <Text>Something went wrong</Text>}
           {uploadStatus === 'success' && <Text>Hurrah! We uploaded your file. </Text>}
-          <Button title="download" onPress={this.downloadAudioFile}/>
+          <Button title="download" onPress={this.downloadAudioFile}/> */}
         </View>
       </View>
     );
@@ -58,28 +77,27 @@ class Record extends React.Component {
     uploadToS3: PropTypes.func.isRequired,
     uploadStatus: PropTypes.string,
     isUploading: PropTypes.bool.isRequired,
+    questions: PropTypes.array.isRequired,
+    fetchQuestions: PropTypes.func.isRequired,
+    questionsLoading: PropTypes.bool.isRequired,
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'pink',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
-});
 
 const mapStateToProps = ({ auth, content }) => ({
   user: auth.user,
   isUploading: content.isUploading,
   uploadStatus: content.uploadStatus,
+  questions: content.questions,
+  questionsLoading: content.questionsLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   uploadToS3: (uri, idToken) => {
     dispatch(uploadToS3(uri, idToken));
+  },
+  fetchQuestions: () => {
+    dispatch(fetchQuestions());
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Record);
+export default connect(mapStateToProps, mapDispatchToProps)(Practice);
