@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { createBottomTabNavigator } from 'react-navigation';
 import Feed from './components/Feed';
 import MyRecordings from './components/MyRecordings';
-import Practice from './components/Practice';
+import PracticeStack from './components/PracticeStack';
 import Settings from './components/Settings';
 
 const iconForRoutes = {
@@ -37,7 +37,7 @@ NavComponent.propTypes = {
 export default createBottomTabNavigator(
   {
     Feed: Feed,
-    Practice: Practice,
+    Practice: PracticeStack,
     Recordings: MyRecordings,
     Settings: Settings,
   },

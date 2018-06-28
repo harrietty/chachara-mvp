@@ -1,28 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {FileSystem} from 'expo';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { uploadToS3, downloadAudioFile, loadAudio, fetchQuestions } from '../actions/content.actions';
 import AudioRecorder from './AudioRecorder';
-import RecordButton from './RecordButton';
-import Spinner from '../reusable/Spinner';
+import Button from '../reusable/Button';
+import { uploadToS3, downloadAudioFile, loadAudio } from '../actions/content.actions';
 
 import common from '../styles/common';
-import question from '../styles/question';
 
-class Practice extends React.Component {
-  static navigationOptions () {
-    return {
-      title: 'Practice',
-    };
-  }
-
-  componentDidMount() {
-    this.props.fetchQuestions();
-  }
-
+class Record extends React.Component {
   upload = (uri) => {
     const {idToken} = this.props.user;
     fetch(uri)
@@ -40,33 +28,28 @@ class Practice extends React.Component {
     console.log(uri);
     // loadAudio(uri);
   }
-
   render () {
-    const { uploadStatus, isUploading, questions, questionsLoading } = this.props;
+    const q = this.props.navigation.getParam('question', {});
+    const { uploadStatus, isUploading } = this.props;
     return (
       <View style={common.container}>
-        <View style={common.inAppHeaderArea}>
-          <Text style={common.header}>Practice</Text>
+        <View style={common.headerArea}>
+          <Text style={common.header}>
+            Record your answer
+          </Text>
         </View>
-        
         <View style={common.mainArea}>
-          {questionsLoading && <Spinner/>}
-          {!questionsLoading && questions.map((q, i) => {
-            return (
-              <View style={question.container} key={i}>
-                <Text style={question.text}>{q.text}</Text>);
-                <RecordButton>
+          <Text style={common.text}>
+            {q.text}
+          </Text>
 
-                </RecordButton>
-              </View>
-            );
-          })}
-          {/* <Text>¿Qué hay que hacer en tu pueblo/ciudad/vecindario?</Text>
           <AudioRecorder upload={this.upload} />
           {isUploading && <Text>Currently uploading...</Text>}
           {uploadStatus === 'failure' && <Text>Something went wrong</Text>}
           {uploadStatus === 'success' && <Text>Hurrah! We uploaded your file. </Text>}
-          <Button title="download" onPress={this.downloadAudioFile}/> */}
+          <Button _onPressButton={this.downloadAudioFile}>
+            Download
+          </Button>
         </View>
       </View>
     );
@@ -77,9 +60,7 @@ class Practice extends React.Component {
     uploadToS3: PropTypes.func.isRequired,
     uploadStatus: PropTypes.string,
     isUploading: PropTypes.bool.isRequired,
-    questions: PropTypes.array.isRequired,
-    fetchQuestions: PropTypes.func.isRequired,
-    questionsLoading: PropTypes.bool.isRequired,
+    navigation: PropTypes.object.isRequired,
   }
 }
 
@@ -87,17 +68,12 @@ const mapStateToProps = ({ auth, content }) => ({
   user: auth.user,
   isUploading: content.isUploading,
   uploadStatus: content.uploadStatus,
-  questions: content.questions,
-  questionsLoading: content.questionsLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   uploadToS3: (uri, idToken) => {
     dispatch(uploadToS3(uri, idToken));
-  },
-  fetchQuestions: () => {
-    dispatch(fetchQuestions());
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Practice);
+export default connect(mapStateToProps, mapDispatchToProps)(Record);
