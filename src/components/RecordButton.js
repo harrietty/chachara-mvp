@@ -8,9 +8,13 @@ import question from '../styles/question';
 export default class RecordButton extends React.Component {
   render () {
     return (
-      <TouchableOpacity style={question.recordContainer}>
+      <TouchableOpacity onPress={this.props.onPress} style={question.recordContainer}>
         <Icon name='microphone' size={25} color='#B2646F' />
       </TouchableOpacity>
     );
+  }
+
+  static propTypes = {
+    onPress: PropTypes.func.isRequired,
   }
 }
