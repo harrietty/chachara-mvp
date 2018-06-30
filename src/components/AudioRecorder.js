@@ -28,15 +28,6 @@ const getAudioConfig = (mode) => {
       playsInSilentModeIOS: true,
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
       shouldDuckAndroid: true,
-      // extension: '.m4a',
-      // outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
-      // audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MIN,
-      // sampleRate: 44100,
-      // numberOfChannels: 2,
-      // bitRate: 128000,
-      // linearPCMBitDepth: 16,
-      // linearPCMIsBigEndian: false,
-      // linearPCMIsFloat: false,
     }
   }[mode];
 };
@@ -177,8 +168,8 @@ export default class AudioRecorder extends React.Component {
         return ( <
           View >
           <
-          Text > Loading... < /Text> <
-          /View>
+          Text > Loading... < /Text> < /
+          View >
         );
       } else if (!permissionToRecord) {
         return ( <
@@ -199,28 +190,28 @@ export default class AudioRecorder extends React.Component {
             isRecording ? this.stopRecording : this.startRecording
           }
           /> {
-            sound && ( <
-              View >
-              <
-              Button title = {
-                isPlaying ? 'Pause' : 'Play'
-              }
-              onPress = {
-                this.playPauseSound
-              }
-              /> <
-              /View>
-            )
-          } {
-            error && ( <
-                Text > Something went wrong: -( < /Text>)
-              } <
-              Button title = 'Save'
+          sound && ( <
+            View >
+            <
+            Button title = {
+              isPlaying ? 'Pause' : 'Play'
+            }
+            onPress = {
+              this.playPauseSound
+            }
+            /> < /
+            View >
+          )
+        } {
+          error && ( <
+            Text > Something went wrong: -( < /Text>)
+            } <
+            Button title = 'Save'
             onPress = {
               this.save
             }
-            /> <
-            /View> <
+            /> < /
+            View > <
             /View>
           );
         }
