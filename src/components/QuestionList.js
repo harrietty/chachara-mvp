@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 
-import { fetchQuestions } from '../actions/content.actions';
+import { fetchQuestions, getQuestionsFromStorage } from '../actions/content.actions';
+import userConfig from '../user-config';
 
 import RecordButton from './RecordButton';
 import Spinner from '../reusable/Spinner';
@@ -18,8 +19,21 @@ class QuestionList extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.props.fetchQuestions();
+  async componentDidMount() {
+    const {LANG} = userConfig;
+    const cachedQuestions = JSON.parse(await AsyncStorage.getItem(`QUESTIONS-${LANG}`));
+    const DAY_SECONDS = 86400;
+    if (cachedQuestions && this.getAge(cachedQuestions.time) < DAY_SECONDS) {
+      this.props.getQuestionsFromStorage();
+    } else {
+      this.props.fetchQuestions();
+    }
+  }
+
+  getAge (ms) {
+    const s = ms / 1000;
+    const today = new Date().getTime() / 1000;
+    return today - s;
   }
 
   goToChooseLength = (question) => () => {
@@ -53,6 +67,7 @@ class QuestionList extends React.Component {
     user: PropTypes.object,
     questions: PropTypes.array.isRequired,
     fetchQuestions: PropTypes.func.isRequired,
+    getQuestionsFromStorage: PropTypes.func.isRequired,
     questionsLoading: PropTypes.bool.isRequired,
     navigation: PropTypes.object.isRequired,
   }
@@ -67,6 +82,9 @@ const mapStateToProps = ({ auth, content }) => ({
 const mapDispatchToProps = (dispatch) => ({
   fetchQuestions: () => {
     dispatch(fetchQuestions());
+  },
+  getQuestionsFromStorage: () => {
+    dispatch(getQuestionsFromStorage());
   }
 });
 
