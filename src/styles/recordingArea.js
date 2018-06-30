@@ -7,4 +7,11 @@ export default StyleSheet.create({
     height: 230,
     width: 230,
   },
+  startAgain: {
+    fontFamily: 'AvenirNext-Regular',
+    fontSize: 18,
+    color: '#DE122F',
+    textAlign: 'center',
+    margin: 10
+  }
 });

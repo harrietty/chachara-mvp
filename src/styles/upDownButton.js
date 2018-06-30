@@ -7,7 +7,7 @@ export default StyleSheet.create({
     margin: 10,
   },
   buttonContainer: {
-    flex: 0.8,
+    height: 60,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
