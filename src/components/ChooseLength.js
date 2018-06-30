@@ -1,22 +1,23 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { View, ImageBackground, Text, ScrollView } from 'react-native';
+import { View, ImageBackground, Text } from 'react-native';
 
-import Button from '../reusable/Button';
 import TextLink from '../reusable/TextLink';
+import UpDownButton from './UpDownButton';
+import RecordingArea from './RecordingArea';
 
 import common from '../styles/common';
 import styles from '../styles/chooseLength';
-
-const LENGTHS = [
-  {seconds: 30, text: '30 seconds'},
-  {seconds: 60, text: '1 minute'},
-  {seconds: 90, text: '1.5 minutes'},
-  {seconds: 120, text: '2 minutes'},
-  {seconds: 300, text: '5 minutes'},
-];
+import buttonStyles from '../styles/upDownButton';
 
 export default class ChooseLength extends React.Component {
+  state = {
+    speakingTime: 120,
+    recordingInProgress: false
+  }
+
+  static MAX_SPEAKING_TIME = 300
+
   goToRecordPage = (length) => () => {
     this.props.navigation.navigate('Record', {length});
   }
@@ -25,10 +26,22 @@ export default class ChooseLength extends React.Component {
     this.props.navigation.goBack();
   }
 
+  updateSpeakingTime = (time) => () => {
+    this.setState({
+      speakingTime: (this.state.speakingTime + time)
+    });
+  }
+
+  disableButtons = () => {
+    this.setState({
+      recordingInProgress: true
+    });
+  }
+
   render () {
     const q = this.props.navigation.getParam('question', {});
     return (
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <View style={common.container}>
         <View style={styles.bubbleContainer}>
           <ImageBackground source={require('../img/speech2.png')} style={styles.bubbleImage}>
             <View style={styles.bubbleTextContainer}>
@@ -38,16 +51,27 @@ export default class ChooseLength extends React.Component {
         </View>
         <View style={styles.mainContainer}>
           <Text style={common.text}>I want to speak for...</Text>
-          {LENGTHS.map((length, i) => (
-            <Button key={i} _onPressButton={this.goToRecordPage(length)}>
-              {length.text}
-            </Button>
-          ))}
+          <View style={buttonStyles.buttonContainer}>
+            <UpDownButton
+              iconName='minus'
+              onPress={this.updateSpeakingTime(-30)}
+              disabled={(this.state.speakingTime <= 30) || this.state.recordingInProgress} />
+            <UpDownButton
+              iconName='plus'
+              onPress={this.updateSpeakingTime(30)}
+              disabled={(this.state.speakingTime >= ChooseLength.MAX_SPEAKING_TIME) || this.state.recordingInProgress} />
+          </View>
+          <View>
+            <Text style={common.text}>
+              {this.state.speakingTime} seconds
+            </Text>
+          </View>
+          <RecordingArea disableButtons={this.disableButtons} />
           <TextLink onPress={this.goBack}>
             Choose another question
           </TextLink>
         </View>
-      </ScrollView>
+      </View>
     );
   }
 

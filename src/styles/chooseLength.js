@@ -33,5 +33,8 @@ export default StyleSheet.create({
     fontSize: 28,
     color: '#B2646F',
     textAlign: 'center',
-  }
+  },
+  wantToSpeakContainer: {
+    height: 100
+  },
 });
