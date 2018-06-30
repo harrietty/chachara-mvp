@@ -1,5 +1,8 @@
 import { Storage } from 'aws-amplify';
+import { AsyncStorage } from 'react-native';
 import * as types from '../types';
+
+import userConfig from '../user-config';
 
 import Expo from 'expo';
 
@@ -26,16 +29,37 @@ export async function downloadAudioFile(sourceUri, destinationUri) {
 }
 
 export const fetchQuestions = () => {
-  const LANG = 'es';
+  const {LANG} = userConfig;
   return dispatch => {
     dispatch(fetchQuestionsRequest());
     return fetch(`https://e086imwdd1.execute-api.eu-west-1.amazonaws.com/latest/languages/${LANG}/questions`)
       .then(res => res.json())
       .then(({questions}) => {
         dispatch(fetchQuestionsSuccess(questions));
+        return questions;
+      })
+      .then(questions => {
+        return AsyncStorage.setItem(`QUESTIONS-${LANG}`, JSON.stringify({
+          questions,
+          time: new Date().getTime()
+        }));
       })
       .catch(() => {
         dispatch(fetchQuestionsError('Could not load questions'));
+      });
+  };
+};
+
+export const getQuestionsFromStorage = () => {
+  const {LANG} = userConfig;
+  return dispatch => {
+    dispatch(fetchQuestionsRequest());
+    return AsyncStorage.getItem(`QUESTIONS-${LANG}`)
+      .then(questions => {
+        dispatch(fetchQuestionsSuccess(JSON.parse(questions).questions));
+      })
+      .catch(() => {
+        fetchQuestionsError('Could not load questions');
       });
   };
 };
