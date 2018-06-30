@@ -1,6 +1,11 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+  scrollViewContainer: {
+    backgroundColor: '#FBFFFC',
+    justifyContent: 'space-around',
+    paddingBottom: 30
+  },
   bubbleContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -14,7 +19,6 @@ export default StyleSheet.create({
     flex: 5
   },
   bubbleImage: {
-    // resizeMode: 'stretch',
   },
   bubbleTextContainer: {
     height: 270,
