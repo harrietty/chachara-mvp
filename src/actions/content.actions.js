@@ -79,12 +79,18 @@ export const fetchQuestionsError = (err) => ({
 });
 
 export const uploadToS3 = (buf) => {
+  console.log('uploading');
   return (dispatch) => {
-    return Storage.put('main4.caf', buf)
+    dispatch(uploadToS3Request());
+    return Storage.put('somefile.caf', buf)
       .then(res => {
+        dispatch(uploadToS3Success());
         // return loadAudio();
       })
-      .catch(console.log);
+      .catch((err) => {
+        console.log(err);
+        dispatch(uploadToS3Failure());
+      });
   };
 };
 

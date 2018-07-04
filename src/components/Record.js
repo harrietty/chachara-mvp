@@ -28,6 +28,9 @@ class Record extends React.Component {
     console.log(uri);
     // loadAudio(uri);
   }
+
+  
+
   render () {
     const q = this.props.navigation.getParam('question', {});
     const { uploadStatus, isUploading } = this.props;

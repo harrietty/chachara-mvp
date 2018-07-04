@@ -14,14 +14,14 @@ import buttonStyles from '../styles/upDownButton';
 
 export default class ChooseLength extends React.Component {
   state = {
-    speakingTime: 120,
+    speakingTime: 2,
     recordingInProgress: false,
     permissionToRecord: false,
     isLoading: true
   }
 
   static MAX_SPEAKING_TIME = 300
-  static MIN_SPEAKING_TIME = 10
+  static MIN_SPEAKING_TIME = 2
   static STEP = 10
 
   askForPermissionToRecord = async () => {
@@ -65,6 +65,10 @@ export default class ChooseLength extends React.Component {
     });
   }
 
+  moveToPlayback = (recording) => {
+    this.props.navigation.navigate('Playback', {recording});
+  }
+
   render () {
     const q = this.props.navigation.getParam('question', {});
     const { permissionToRecord, isLoading } = this.state;
@@ -98,7 +102,10 @@ export default class ChooseLength extends React.Component {
               </Text>
             </View>
           </View>
-          <RecordingArea selectedTime={this.state.speakingTime} disableButtons={this.disableButtons} />
+          <RecordingArea
+            selectedTime={this.state.speakingTime}
+            disableButtons={this.disableButtons}
+            moveToPlayback={this.moveToPlayback} />
         </View>
       </View>
     );
