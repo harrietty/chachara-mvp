@@ -5,10 +5,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class StopStartButton extends React.Component {
   render () {
-    const {recording, finished, isPlaying, beginRecording, pauseRecording, playSound, hasStarted, continueRecording} = this.props;
+    const {recording, finished, beginRecording, pauseRecording, hasStarted, continueRecording} = this.props;
     let action;
     if (!hasStarted) action = beginRecording;
-    else if (finished) action = playSound;
     else if (hasStarted && recording) action = pauseRecording;
     else if (hasStarted && !recording) action = continueRecording;
     return (
@@ -16,8 +15,6 @@ export default class StopStartButton extends React.Component {
         <TouchableOpacity style={{width: 100, height: 100, alignItems: 'center', justifyContent: 'center'}} onPress={action}>
           {recording && <Icon name='circle' size={50} color='#DE122F' />}
           {(!recording && !finished) && <Icon name='microphone' size={50} color='#5E4B4D' />}
-          {(finished && !isPlaying) && <Icon name='play-circle' size={50} color='#5E4B4D' />}
-          {(finished && isPlaying) && <Icon name='pause' size={50} color='#DE122F' />}
         </TouchableOpacity>
       </View>
     );
@@ -27,7 +24,6 @@ export default class StopStartButton extends React.Component {
     beginRecording: PropTypes.func.isRequired,
     continueRecording: PropTypes.func.isRequired,
     pauseRecording: PropTypes.func.isRequired,
-    playSound: PropTypes.func.isRequired,
     recording: PropTypes.bool.isRequired,
     hasStarted: PropTypes.bool.isRequired,
     finished: PropTypes.bool.isRequired

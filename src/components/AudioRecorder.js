@@ -32,7 +32,6 @@ const getAudioConfig = (mode) => {
   }[mode];
 };
 
-
 export default class AudioRecorder extends React.Component {
     state = {
       permissionToRecord: false,

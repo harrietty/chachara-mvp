@@ -5,6 +5,7 @@ import { View, Text } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import StopStartButton from './StopStartButton';
+import Button from '../reusable/Button';
 
 import styles from '../styles/recordingArea';
 
@@ -33,8 +34,6 @@ export default class RecordingArea extends React.Component {
     time: 0,
     recording: false,
     intervalId: null,
-    sound: null,
-    isPlaying: false,
     error: null,
     finished: false
   }
@@ -94,48 +93,9 @@ export default class RecordingArea extends React.Component {
       intervalId: null,
       finished: true
     });
-
+    
     await Audio.setAudioModeAsync(getAudioConfig('PLAYBACK'));
-    await this.setMostRecentRecordingSound();
-  }
-
-  setMostRecentRecordingSound = async () => {
-    const {
-      sound
-    } = await this.recording.createNewLoadedSound({
-      isLooping: false,
-      isMuted: false,
-      volume: 1.0,
-      rate: 1.0
-    }, (status) => {
-      if (status.didJustFinish) {
-        this.state.sound.setPositionAsync(0);
-        this.setState({
-          isPlaying: false
-        });
-      }
-    });
-    this.setState({
-      sound
-    });
-  }
-
-  playPauseSound = async () => {
-    if (!this.state.sound) {
-      await this.setMostRecentRecordingSound();
-    }
-    const { isPlaying, sound } = this.state;
-    if (isPlaying) {
-      sound.pauseAsync();
-      this.setState({
-        isPlaying: false
-      });
-    } else {
-      sound.playAsync();
-      this.setState({
-        isPlaying: true
-      });
-    }
+    this.props.moveToPlayback(this.recording);
   }
 
   pauseRecording = async () => {
@@ -173,18 +133,16 @@ export default class RecordingArea extends React.Component {
               pauseRecording={this.pauseRecording}
               recording={this.state.recording}
               finished={this.state.finished}
-              playSound={this.playPauseSound}
-              isPlaying={this.state.isPlaying}
             />
           )}
         </AnimatedCircularProgress>
-        {this.state.time > 0 && <Text style={styles.startAgain}>Start again</Text>}
       </View>
     );
   }
 
   static propTypes = {
     disableButtons: PropTypes.func.isRequired,
-    selectedTime: PropTypes.number.isRequired
+    selectedTime: PropTypes.number.isRequired,
+    moveToPlayback: PropTypes.func.isRequired,
   }
 }

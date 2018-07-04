@@ -17,8 +17,6 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flex: 5,
-    borderWidth: 2,
-    borderColor: 'red'
   },
   bubbleImage: {
   },
