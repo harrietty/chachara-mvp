@@ -1,5 +1,6 @@
 import { Storage } from 'aws-amplify';
 import { AsyncStorage } from 'react-native';
+import { FileSystem } from 'expo';
 import * as types from '../types';
 
 import userConfig from '../user-config';
@@ -78,13 +79,13 @@ export const fetchQuestionsError = (err) => ({
   payload: err
 });
 
-export const uploadToS3 = (buf) => {
-  console.log('uploading');
+export const uploadToS3 = (buf, uri) => {
   return (dispatch) => {
     dispatch(uploadToS3Request());
     return Storage.put('somefile.caf', buf)
-      .then(res => {
+      .then(() => {
         dispatch(uploadToS3Success());
+        return FileSystem.deleteAsync(uri);
         // return loadAudio();
       })
       .catch((err) => {
