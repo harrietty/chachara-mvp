@@ -90,12 +90,10 @@ class Playback extends React.Component {
   saveSound = async () => {
     const recording = this.props.navigation.getParam('recording', {});
     const { uri } = await FileSystem.getInfoAsync(recording.getURI());
-    console.log({uri})
-    const {idToken} = this.props.user;
     fetch(uri)
       .then(response => response.blob())
       .then(buffer => {
-        this.props.uploadToS3(buffer, idToken);
+        this.props.uploadToS3(buffer, uri);
       });
   }
 
@@ -137,8 +135,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  uploadToS3: (buffer, token) => {
-    dispatch(uploadToS3(buffer, token));
+  uploadToS3: (buffer, uri) => {
+    dispatch(uploadToS3(buffer, uri));
   }
 });
 
