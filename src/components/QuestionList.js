@@ -50,7 +50,8 @@ class QuestionList extends React.Component {
         
         <View style={common.mainArea}>
           {questionsLoading && <Spinner/>}
-          {!questionsLoading && questions.map((q, i) => {
+          {!questionsLoading && Object.keys(questions).map((id, i) => {
+            let q = questions[id];
             return (
               <View style={question.container} key={i}>
                 <Text style={question.text}>{q.text}</Text>);
@@ -65,7 +66,7 @@ class QuestionList extends React.Component {
 
   static propTypes = {
     user: PropTypes.object,
-    questions: PropTypes.array.isRequired,
+    questions: PropTypes.object.isRequired,
     fetchQuestions: PropTypes.func.isRequired,
     getQuestionsFromStorage: PropTypes.func.isRequired,
     questionsLoading: PropTypes.bool.isRequired,
