@@ -1,7 +1,7 @@
 import * as actions from '../src/actions/content.actions';
 import reducer from '../src/reducers/content';
 
-xdescribe('content reducer', () => {
+describe('content reducer', () => {
   const initialState = {
     isUploading: false,
     uploadStatus: null,
