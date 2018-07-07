@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Text, View, AsyncStorage } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 
-import { fetchQuestions, getQuestionsFromStorage } from '../actions/content.actions';
+import { fetchQuestions, getQuestionsFromStorage, fetchUserRecordings } from '../actions/content.actions';
 import userConfig from '../user-config';
 
 import RecordButton from './RecordButton';
@@ -29,6 +28,10 @@ class QuestionList extends React.Component {
     } else {
       this.props.fetchQuestions();
     }
+
+    if (!this.props.recordingsAvailable) {
+      this.props.fetchUserRecordings(this.props.user);
+    }
   }
 
   getAge (ms) {
@@ -42,7 +45,7 @@ class QuestionList extends React.Component {
   }
 
   render () {
-    const { questions, questionsLoading } = this.props;
+    const { questions, questionsLoading, userRecordingsByQuestionId } = this.props;
     return (
       <View style={common.container}>
         <View style={common.inAppHeaderArea}>
@@ -53,12 +56,10 @@ class QuestionList extends React.Component {
           {questionsLoading && <Spinner/>}
           {!questionsLoading && Object.keys(questions).map((id, i) => {
             let q = questions[id];
-            return (
+            if (!userRecordingsByQuestionId[id]) return (
               <View style={question.container} key={i}>
                 <Text style={question.text}>{q.text}</Text>);
-                {q.userHasAnswered ?
-                  <Icon name='check' size={25} color='#64D19B'/> :
-                  <RecordButton onPress={this.goToChooseLength(q)} />}
+                <RecordButton onPress={this.goToChooseLength(q)} />
               </View>
             );
           })}
@@ -70,17 +71,25 @@ class QuestionList extends React.Component {
   static propTypes = {
     user: PropTypes.object,
     questions: PropTypes.object.isRequired,
+    userRecordingsByQuestionId: PropTypes.object.isRequired,
     fetchQuestions: PropTypes.func.isRequired,
     getQuestionsFromStorage: PropTypes.func.isRequired,
+    fetchUserRecordings: PropTypes.func.isRequired,
     questionsLoading: PropTypes.bool.isRequired,
+    recordingsAvailable: PropTypes.bool.isRequired,
     navigation: PropTypes.object.isRequired,
   }
 }
 
-const mapStateToProps = ({ auth, content }) => ({
+const mapStateToProps = ({ auth, content, userRecordings }) => ({
   user: auth.user,
   questions: content.questions,
   questionsLoading: content.questionsLoading,
+  recordingsAvailable: userRecordings.recordings.length > 0,
+  userRecordingsByQuestionId: userRecordings.recordings.reduce((acc, r) => {
+    acc[r.question_id] = r;
+    return acc;
+  }, {})
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -89,6 +98,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   getQuestionsFromStorage: () => {
     dispatch(getQuestionsFromStorage());
+  },
+  fetchUserRecordings: (user) => {
+    dispatch(fetchUserRecordings(user));
   }
 });
 
