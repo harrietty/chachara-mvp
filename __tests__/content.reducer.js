@@ -22,40 +22,11 @@ describe('content reducer', () => {
   });
   
   test('receiving action UPLOAD_TO_S3_SUCCESS', () => {
-    let state = {
-      isUploading: false,
-      uploadStatus: null,
-      questions: {
-        123: {
-          _id: '123',
-          text: 'foo',
-          userHasAnswered: false
-        },
-        456: {
-          _id: '456',
-          text: 'bar',
-          userHasAnswered: false
-        }
-      },
-      loadQuestionsError: null,
-      questionsLoading: false
-    };
-    const action = actions.uploadToS3Success('123');
-    expect(reducer(state, action)).toEqual({
+    const action = actions.uploadToS3Success();
+    expect(reducer(initialState, action)).toEqual({
       isUploading: false,
       uploadStatus: 'success',
-      questions: {
-        123: {
-          _id: '123',
-          text: 'foo',
-          userHasAnswered: true
-        },
-        456: {
-          _id: '456',
-          text: 'bar',
-          userHasAnswered: false
-        }
-      },
+      questions: {},
       loadQuestionsError: null,
       questionsLoading: false
     });
