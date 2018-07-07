@@ -7,6 +7,9 @@ import userConfig from '../user-config';
 
 import Expo from 'expo';
 
+const API_ROOT = 'http://localhost:3000';
+const PROD_API_ROOT = 'https://e086imwdd1.execute-api.eu-west-1.amazonaws.com/latest/';
+
 export async function loadAudio(uri) {
   const soundObject = new Expo.Audio.Sound();
   try {
@@ -33,7 +36,7 @@ export const fetchQuestions = () => {
   const {LANG} = userConfig;
   return dispatch => {
     dispatch(fetchQuestionsRequest());
-    return fetch(`https://e086imwdd1.execute-api.eu-west-1.amazonaws.com/latest/languages/${LANG}/questions`)
+    return fetch(`${API_ROOT}/languages/${LANG}/questions`)
       .then(res => res.json())
       .then(({questions}) => {
         dispatch(fetchQuestionsSuccess(questions));
@@ -79,14 +82,34 @@ export const fetchQuestionsError = (err) => ({
   payload: err
 });
 
-export const uploadToS3 = (buf, uri) => {
+export const uploadToS3 = (buf, uri, user, questionId, length) => {
   return (dispatch) => {
     dispatch(uploadToS3Request());
     return Storage.put('somefile.caf', buf)
-      .then(() => {
+      .then((res) => {
+        console.log('Successfully uploaded file to S3');
+        const filename = res.key;
+        return fetch(`${API_ROOT}/users/${user.id}/recordings`, {
+          method: 'POST',
+          headers: {
+            Authorization: user.idToken,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            url: filename,
+            lengthMillis: length,
+            language: userConfig.LANG,
+            questionId: questionId
+          })
+        });
+        // return loadAudio();
+      })
+      .then(res => res.json())
+      .then((res) => {
+        console.log('Recording saved to DB', res);
+        if (!res.recording) return Promise.reject('Unable to save recording to DB');
         dispatch(uploadToS3Success());
         return FileSystem.deleteAsync(uri);
-        // return loadAudio();
       })
       .catch((err) => {
         console.log(err);

@@ -3,7 +3,6 @@ import { Permissions } from 'expo';
 import React from 'react';
 import { View, ImageBackground, Text } from 'react-native';
 
-import TextLink from '../reusable/TextLink';
 import UpDownButton from './UpDownButton';
 import RecordingArea from './RecordingArea';
 import Spinner from '../reusable/Spinner';
@@ -45,10 +44,6 @@ export default class ChooseLength extends React.Component {
     await this.askForPermissionToRecord();
   }
 
-  goToRecordPage = (length) => () => {
-    this.props.navigation.navigate('Record', {length});
-  }
-  
   goBack = () => {
     this.props.navigation.goBack();
   }
@@ -66,7 +61,8 @@ export default class ChooseLength extends React.Component {
   }
 
   moveToPlayback = (recording) => {
-    this.props.navigation.navigate('Playback', {recording});
+    const question = this.props.navigation.getParam('question', {});
+    this.props.navigation.navigate('Playback', {recording, question});
   }
 
   render () {
