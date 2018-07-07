@@ -129,3 +129,32 @@ export const uploadToS3Success = () => ({
 export const uploadToS3Failure = () => ({
   type: types.UPLOAD_TO_S3_FAILURE,
 });
+
+export const fetchUserRecordings = (user) => {
+  return (dispatch) => {
+    dispatch(fetchUserRecordingsRequest());
+    return fetch(`${API_ROOT}/users/${user.id}/recordings`)
+      .then(res => res.json())
+      .then(res => {
+        dispatch(fetchUserRecordingsSuccess((res.recordings || [])));
+      })
+      .catch(err => {
+        console.log('Error fetching recordings', err);
+        dispatch(fetchUserRecordingsFailure('Unable to fetch user recordings'));
+      });
+  };
+};
+
+export const fetchUserRecordingsRequest = () => ({
+  type: types.FETCH_USER_RECORDINGS_REQUEST
+});
+
+export const fetchUserRecordingsSuccess = (recordings) => ({
+  type: types.FETCH_USER_RECORDINGS_SUCCESS,
+  payload: recordings
+});
+
+export const fetchUserRecordingsFailure = (err) => ({
+  type: types.FETCH_USER_RECORDINGS_FAILURE,
+  payload: err
+});
