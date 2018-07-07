@@ -18,10 +18,16 @@ export default (state = initialState, action) => {
   }
 
   else if (action.type === types.UPLOAD_TO_S3_SUCCESS) {
+    const updatedQuestion = Object.assign({}, state.questions[action.payload.questionId], {
+      userHasAnswered: true
+    });
     return {
       ...state,
       isUploading: false,
       uploadStatus: 'success',
+      questions: Object.assign({}, state.questions, {
+        [action.payload.questionId]: updatedQuestion
+      })
     };
   }
 

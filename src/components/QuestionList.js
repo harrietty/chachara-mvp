@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Text, View, AsyncStorage } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 
 import { fetchQuestions, getQuestionsFromStorage } from '../actions/content.actions';
@@ -55,7 +56,9 @@ class QuestionList extends React.Component {
             return (
               <View style={question.container} key={i}>
                 <Text style={question.text}>{q.text}</Text>);
-                <RecordButton onPress={this.goToChooseLength(q)} />
+                {q.userHasAnswered ?
+                  <Icon name='check' size={25} color='#64D19B'/> :
+                  <RecordButton onPress={this.goToChooseLength(q)} />}
               </View>
             );
           })}
