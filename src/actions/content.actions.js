@@ -108,7 +108,7 @@ export const uploadToS3 = (buf, uri, user, questionId, length) => {
       .then((res) => {
         console.log('Recording saved to DB', res);
         if (!res.recording) return Promise.reject('Unable to save recording to DB');
-        dispatch(uploadToS3Success());
+        dispatch(uploadToS3Success(questionId));
         return FileSystem.deleteAsync(uri);
       })
       .catch((err) => {
@@ -122,8 +122,11 @@ export const uploadToS3Request = () => ({
   type: types.UPLOAD_TO_S3_REQUEST,
 });
 
-export const uploadToS3Success = () => ({
+export const uploadToS3Success = (questionId) => ({
   type: types.UPLOAD_TO_S3_SUCCESS,
+  payload: {
+    questionId
+  }
 });
 
 export const uploadToS3Failure = () => ({

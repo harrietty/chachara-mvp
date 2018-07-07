@@ -3,7 +3,7 @@ import * as types from '../types';
 const initialState = {
   isUploading: false,
   uploadStatus: null,
-  questions: [],
+  questions: {},
   loadQuestionsError: null,
   questionsLoading: false
 };
@@ -43,7 +43,10 @@ export default (state = initialState, action) => {
   else if (action.type === types.FETCH_QUESTIONS_SUCCESS) {
     return {
       ...state,
-      questions: action.payload,
+      questions: action.payload.reduce((acc, q) => {
+        acc[q._id] = q;
+        return acc;
+      }, {}),
       loadQuestionsError: null,
       questionsLoading: false,
     };
@@ -52,7 +55,7 @@ export default (state = initialState, action) => {
   else if (action.type === types.FETCH_QUESTIONS_FAILURE) {
     return {
       ...state,
-      questions: [],
+      questions: {},
       loadQuestionsError: action.payload,
       questionsLoading: false,
     };
