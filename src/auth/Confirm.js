@@ -53,7 +53,6 @@ class Confirm extends React.Component {
 
   // TODO: make sure errors disappear when moving between pages
   render () {
-    console.log('confirm rendering', this.props);
     const {previouslyEnteredUsername, code, username, loading, error } = this.props;
     const uname = previouslyEnteredUsername || username;
     if (error === 'Incorrect username or password.') return this.signInAgain();
