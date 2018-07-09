@@ -56,13 +56,6 @@ export default StyleSheet.create({
     lineHeight: 50,
     fontFamily: 'Avenir-Light'
   },
-  inputLabel: {
-    fontFamily: 'AvenirNext-Regular',
-    textAlign: 'left',
-    width: 300,
-    marginTop: 10,
-    color: '#B2646F'
-  },
   spinnerContainer: {
     flex: 1,
     justifyContent: 'center',

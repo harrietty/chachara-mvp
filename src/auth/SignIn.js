@@ -63,7 +63,7 @@ class SignIn extends React.Component {
     if (this.props.loading) return <Spinner />;
     else return (
       <ImageBackground source={require('../img/bg.jpg')} style={auth.background}>
-        <KeyboardAvoidingView style={auth.keyboardView}>
+        <KeyboardAvoidingView style={auth.keyboardView} enabled behavior='padding'>
           <View style={auth.header}>
             <Icon name={'ios-chatbubbles'} size={45} color='#2E2E28' />;
             <Text style={auth.headerText}>Chachara</Text>
