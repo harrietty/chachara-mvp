@@ -32,30 +32,29 @@ export default StyleSheet.create({
     color: 'red',
   },
   input: {
-    height: 55,
-    fontSize: 18,
-    borderWidth: 1,
-    borderColor: '#99B29E',
-    borderRadius: 25,
+    height: 50,
+    fontSize: 20,
+    borderRadius: 15,
     padding: 10,
     margin: 10,
     width: 300,
     backgroundColor: 'white',
+    opacity: 0.9,
     fontFamily: 'AvenirNext-Regular'
   },
   touchableOpacity: {
-    height: 55,
-    width: 300,
+    height: 50,
+    width: 250,
     margin: 10,
-    backgroundColor: '#99B29E',
+    backgroundColor: '#AFDBDB',
     borderRadius: 25,
   },
   buttonText: {
-    fontSize: 35,
-    color: '#fff',
+    fontSize: 30,
+    color: '#434545',
     textAlign: 'center',
-    lineHeight: 55,
-    fontFamily: 'AvenirNext-Regular'
+    lineHeight: 50,
+    fontFamily: 'Avenir-Light'
   },
   inputLabel: {
     fontFamily: 'AvenirNext-Regular',

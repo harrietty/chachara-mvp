@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View, ImageBackground, KeyboardAvoidingView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -11,6 +11,7 @@ import TextLink from '../reusable/TextLink';
 import Spinner from '../reusable/Spinner';
 
 import common from '../styles/common';
+import auth from '../stylesNew/auth';
 
 class SignIn extends React.Component {
   handleSignIn = () => {
@@ -61,34 +62,36 @@ class SignIn extends React.Component {
   render () {
     if (this.props.loading) return <Spinner />;
     else return (
-      <View style={common.container}>
-        <View style={common.headerArea}>
-          <Text style={common.header}>Chachara</Text>
-          <Icon name={'ios-chatbubbles-outline'} size={55} color={common.header.color} />;
-        </View>
-        <View style={common.mainArea}>
-          <TextInput
-            style={common.input}
-            value={this.props.username}
-            placeholder="Username"
-            onChangeText={this.props.updateUsername}
-          />
-          <TextInput
-            style={common.input}
-            value={this.props.password}
-            secureTextEntry
-            placeholder="Password"
-            onChangeText={this.props.updatePassword}
-          />
-          {this.props.error && <Text style={common.error}>{this.props.error}</Text>}
-          <Button _onPressButton={this.handleSignIn}>
-            Sign in
-          </Button>
-          <TextLink onPress={this.goToSignUp}>
-            Create an account
-          </TextLink>
-        </View>
-      </View>
+      <ImageBackground source={require('../img/bg.jpg')} style={auth.background}>
+        <KeyboardAvoidingView style={auth.keyboardView}>
+          <View style={auth.header}>
+            <Icon name={'ios-chatbubbles'} size={45} color='#2E2E28' />;
+            <Text style={auth.headerText}>Chachara</Text>
+          </View>
+          <View style={{alignItems: 'center'}}>
+            <TextInput
+              style={common.input}
+              value={this.props.username}
+              placeholder="Username"
+              onChangeText={this.props.updateUsername}
+            />
+            <TextInput
+              style={common.input}
+              value={this.props.password}
+              secureTextEntry
+              placeholder="Password"
+              onChangeText={this.props.updatePassword}
+            />
+            {this.props.error && <Text style={common.error}>{this.props.error}</Text>}
+            <Button _onPressButton={this.handleSignIn}>
+              Sign in
+            </Button>
+            <TextLink onPress={this.goToSignUp}>
+              Create an account
+            </TextLink>
+          </View>
+        </KeyboardAvoidingView>
+      </ImageBackground>
     );
   }
 

@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
   create: {
     marginTop: 10,
     fontSize: 22,
-    fontFamily: 'AvenirNext-UltraLight',
-    textAlign: 'center'
+    fontFamily: 'AvenirNext-Regular',
+    textAlign: 'center',
+    color: '#FBFFFC'
   }
 });
