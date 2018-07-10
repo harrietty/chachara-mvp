@@ -59,5 +59,12 @@ export default (state = initialState, action) => {
     };
   }
 
+  if (action.type === types.UPLOAD_TO_S3_SUCCESS) {
+    return {
+      ...state,
+      recordings: state.recordings.slice().concat(action.payload)
+    };
+  }
+
   return state;
 };

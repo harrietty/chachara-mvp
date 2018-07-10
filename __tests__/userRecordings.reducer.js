@@ -71,4 +71,13 @@ describe('userRecordings reducer', () => {
       error: 'oh no'
     });
   });
+
+  test('receiving action UPLOAD_TO_S3_SUCCESS', () => {
+    const action = actions.uploadToS3Success('new recording');
+    expect(userRecordings(initialState, action)).toEqual({
+      loading: false,
+      recordings: ['new recording'],
+      error: null
+    });
+  });
 });
