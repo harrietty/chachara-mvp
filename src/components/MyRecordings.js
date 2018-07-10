@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, View } from 'react-native';
+import { Text, View, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 
 import { fetchUserRecordings } from '../actions/content.actions';
 import MyRecordingItem from './MyRecordingItem';
 
 import common from '../styles/common';
+import app from '../stylesNew/app';
 
 class UserProfile extends React.Component {
   static navigationOptions () {
@@ -22,18 +23,20 @@ class UserProfile extends React.Component {
   render () {
     const { recordings } = this.props;
     return (
-      <View style={common.container}>
-        <View style={common.inAppHeaderArea}>
-          <Text style={common.header}>My Recordings</Text>
+      <ImageBackground source={require('../img/bg-faded.jpg')} style={{flex: 1}}>
+        <View style={app.container}>
+          <View style={common.inAppHeaderArea}>
+            <Text style={common.header}>My Recordings</Text>
+          </View>
+          <View style={common.mainArea}>
+            {recordings.map((r) => {
+              return (
+                <MyRecordingItem key={r._id} recording={r} />
+              );
+            })}
+          </View>
         </View>
-        <View style={common.mainArea}>
-          {recordings.map((r) => {
-            return (
-              <MyRecordingItem key={r._id} recording={r} />
-            );
-          })}
-        </View>
-      </View>
+      </ImageBackground>
     );
   }
 

@@ -35,6 +35,7 @@ class SignUp extends React.Component {
   }
 
   goToConfirm = (username) => {
+    if (!username) username = this.props.username;
     this.props.navigation.navigate({
       routeName: 'Confirm',
       params: { username, password: this.props.password }
@@ -107,6 +108,11 @@ class SignUp extends React.Component {
 
             <TextLink onPress={this.goToSignIn}>
               Sign in instead
+            </TextLink>
+
+            {/* Dev purposes */}
+            <TextLink onPress={this.goToConfirm}>
+              confirm
             </TextLink>
           </View>
         </KeyboardAvoidingView>

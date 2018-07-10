@@ -22,8 +22,8 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    fontFamily: 'AvenirNext-UltraLight',
-    fontSize: 40,
+    fontFamily: 'Avenir-Light',
+    fontSize: 35,
     color: '#B2646F'
   },
   error: {

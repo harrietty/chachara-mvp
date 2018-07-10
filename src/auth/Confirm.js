@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View, ImageBackground, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { confirmSignUp, updateConfirmForm } from '../actions/auth.actions';
 import Button from '../reusable/Button';
 import SignOutButton from '../reusable/SignOutButton';
-import TextLink from '../reusable/TextLink';
 import Spinner from '../reusable/Spinner';
 
+import auth from '../stylesNew/auth';
 import common from '../styles/common';
 
 class Confirm extends React.Component {
@@ -26,10 +26,6 @@ class Confirm extends React.Component {
     const {username, code, password, previouslyEnteredUsername} = this.props;
     const uname = username || previouslyEnteredUsername;
     this.props.confirmSignUp(uname, code, password);
-  }
-
-  goBack = () => {
-    this.props.navigation.goBack();
   }
 
   goToSignIn = () => {
@@ -58,38 +54,36 @@ class Confirm extends React.Component {
     if (error === 'Incorrect username or password.') return this.signInAgain();
     else if (loading) return <Spinner />;
     else return (
-      <View style={common.container}>
-        <Text style={common.header}>
-          Please paste the code we have emailed you:
-        </Text>
-
-        <Text style={common.inputLabel}>Username:</Text>
-        <TextInput
-          style={common.input}
-          placeholder='User Name'
-          onChangeText={this.props.updateConfirmForm('username')}
-          value={uname}
-        />
-
-        <Text style={common.inputLabel}>Confirmation code:</Text>
-        <TextInput
-          style={common.input}
-          placeholder='Confirmation Code'
-          onChangeText={this.props.updateConfirmForm('code')}
-          value={code}
-        />
-
-        {error && <Text style={common.error}>{error}</Text>}
-        <Button _onPressButton={this.confirm}>
-          Confirm
-        </Button>
-        <TextLink onPress={this.goBack}>
-          Back to sign up
-        </TextLink>
-        
-        {/* FOR DEVELOPMENT */}
-        <SignOutButton/>
-      </View>
+      <ImageBackground source={require('../img/bg.jpg')} style={auth.background}>
+        <KeyboardAvoidingView style={auth.keyboardView} enabled behavior='padding'>
+          <View style={{alignItems: 'center'}}>
+            <Text style={common.header}>
+              Please paste the code we have emailed you:
+            </Text>
+            <TextInput
+              style={common.input}
+              placeholder='User Name'
+              onChangeText={this.props.updateConfirmForm('username')}
+              value={uname}
+            />
+            <TextInput
+              style={common.input}
+              placeholder='Confirmation Code'
+              onChangeText={this.props.updateConfirmForm('code')}
+              value={code}
+            />
+            <View style={{alignItems: 'center'}}>
+              {error && <Text style={common.error}>{error}</Text>}
+              <Button _onPressButton={this.confirm}>
+                Confirm
+              </Button>
+              
+              {/* FOR DEVELOPMENT */}
+              <SignOutButton/>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </ImageBackground>
     );
   }
 

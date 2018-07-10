@@ -3,9 +3,23 @@ import SignUp from './SignUp';
 import Confirm from './Confirm';
 
 export default createStackNavigator({
-  SignUp: SignUp,
-  Confirm: Confirm,
+  SignUp: {
+    screen: SignUp,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Confirm: {
+    screen: Confirm,
+    navigationOptions: {
+      headerTransparent: true,
+      headerTintColor: '#AFDBDB',
+      headerStyle: {
+        borderBottomColor: 'transparent',
+        elevation: 0
+      }
+    }
+  },
 }, {
   initialRouteName: 'SignUp',
-  headerMode: 'none',
 });

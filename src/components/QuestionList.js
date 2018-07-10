@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Text, View, AsyncStorage } from 'react-native';
+import { Text, View, AsyncStorage, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 
 import { fetchQuestions, getQuestionsFromStorage, fetchUserRecordings } from '../actions/content.actions';
@@ -11,6 +11,7 @@ import Spinner from '../reusable/Spinner';
 
 import common from '../styles/common';
 import question from '../styles/question';
+import app from '../stylesNew/app';
 
 class QuestionList extends React.Component {
   static navigationOptions () {
@@ -47,24 +48,26 @@ class QuestionList extends React.Component {
   render () {
     const { questions, questionsLoading, userRecordingsByQuestionId } = this.props;
     return (
-      <View style={common.container}>
-        <View style={common.inAppHeaderArea}>
-          <Text style={common.header}>Practice</Text>
+      <ImageBackground source={require('../img/bg-faded.jpg')} style={{flex: 1}}>
+        <View style={app.container}>
+          <View style={common.inAppHeaderArea}>
+            <Text style={common.header}>Practice</Text>
+          </View>
+          
+          <View style={common.mainArea}>
+            {questionsLoading && <Spinner/>}
+            {!questionsLoading && Object.keys(questions).map((id, i) => {
+              let q = questions[id];
+              if (!userRecordingsByQuestionId[id]) return (
+                <View style={question.container} key={i}>
+                  <Text style={question.text}>{q.text}</Text>);
+                  <RecordButton onPress={this.goToChooseLength(q)} />
+                </View>
+              );
+            })}
+          </View>
         </View>
-        
-        <View style={common.mainArea}>
-          {questionsLoading && <Spinner/>}
-          {!questionsLoading && Object.keys(questions).map((id, i) => {
-            let q = questions[id];
-            if (!userRecordingsByQuestionId[id]) return (
-              <View style={question.container} key={i}>
-                <Text style={question.text}>{q.text}</Text>);
-                <RecordButton onPress={this.goToChooseLength(q)} />
-              </View>
-            );
-          })}
-        </View>
-      </View>
+      </ImageBackground>
     );
   }
 

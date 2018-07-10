@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
-
-import common from '../styles/common';
+import { View, ActivityIndicator, ImageBackground } from 'react-native';
 
 export default class Spinner extends React.Component {
   render () {
     return (
-      <View style={common.spinnerContainer}>
-        <ActivityIndicator size='large' color = '#B2646F' />
-      </View>
+      <ImageBackground source={require('../img/bg-faded.jpg')} style={{flex: 1}}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator size='large' color = '#B2646F' />
+        </View>
+      </ImageBackground>
     );
   }
 }
