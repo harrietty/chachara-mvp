@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Text, View, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 
-import { fetchUserRecordings } from '../actions/content.actions';
+import { fetchUserRecordings, deleteFromS3 } from '../actions/content.actions';
 import MyRecordingItem from './MyRecordingItem';
+import Spinner from '../reusable/Spinner';
 
 import common from '../styles/common';
 import app from '../stylesNew/app';
@@ -21,8 +22,11 @@ class UserProfile extends React.Component {
   }
 
   render () {
-    const { recordings } = this.props;
-    return (
+    const { recordings, deleteFromS3, user, loading } = this.props;
+    if (loading) return (
+      <Spinner />
+    );
+    else return (
       <ImageBackground source={require('../img/bg-faded.jpg')} style={{flex: 1}}>
         <View style={app.container}>
           <View style={common.inAppHeaderArea}>
@@ -31,7 +35,7 @@ class UserProfile extends React.Component {
           <View style={common.mainArea}>
             {recordings.map((r) => {
               return (
-                <MyRecordingItem key={r._id} recording={r} />
+                <MyRecordingItem key={r._id} recording={r} deleteFromS3={deleteFromS3} user={user} />
               );
             })}
           </View>
@@ -44,17 +48,23 @@ class UserProfile extends React.Component {
     recordings: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired,
     fetchUserRecordings: PropTypes.func.isRequired,
+    deleteFromS3: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
   }
 }
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
-  recordings: state.userRecordings.recordings
+  recordings: state.userRecordings.recordings,
+  loading: state.userRecordings.loading
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchUserRecordings: (user) => {
     dispatch(fetchUserRecordings(user));
+  },
+  deleteFromS3: (recordingUrl, recordingId, user) => {
+    dispatch(deleteFromS3(recordingUrl, recordingId, user));
   }
 });
 

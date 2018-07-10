@@ -33,5 +33,31 @@ export default (state = initialState, action) => {
       error: action.payload,
     };
   }
+
+  if (action.type === types.DELETE_FROM_S3_REQUEST) {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  }
+
+  if (action.type === types.DELETE_FROM_S3_SUCCESS) {
+    return {
+      ...state,
+      loading: false,
+      error: null,
+      recordings: state.recordings.filter(rec => rec._id !== action.payload)
+    };
+  }
+
+  if (action.type === types.DELETE_FROM_S3_FAILURE) {
+    return {
+      ...state,
+      loading: false,
+      error: action.payload
+    };
+  }
+
   return state;
 };

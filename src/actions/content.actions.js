@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Storage } from 'aws-amplify';
 import { AsyncStorage } from 'react-native';
 import { FileSystem } from 'expo';
@@ -106,6 +107,7 @@ export const uploadToS3 = (buf, uri, user, questionId, length) => {
       })
       .then(res => res.json())
       .then((res) => {
+        // TODO: on upload success, populate the list of user recordings
         console.log('Recording saved to DB', res);
         if (!res.recording) return Promise.reject('Unable to save recording to DB');
         dispatch(uploadToS3Success());
@@ -128,6 +130,42 @@ export const uploadToS3Success = () => ({
 
 export const uploadToS3Failure = () => ({
   type: types.UPLOAD_TO_S3_FAILURE,
+});
+
+export const deleteFromS3 = (recordingFilename, recordingId, user) => {
+  return (dispatch) => {
+    dispatch(deleteFromS3Request());
+    return Storage.remove(recordingFilename)
+      .then(() => {
+        return fetch(`${API_ROOT}/users/${user.id}/recordings/${recordingId}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: user.idToken
+          }
+        });
+      })
+      .then(() => {
+        dispatch(deleteFromS3Success(recordingId));
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(deleteFromS3Failure('Something went wrong'));
+      });
+  };
+};
+
+export const deleteFromS3Request = () => ({
+  type: types.DELETE_FROM_S3_REQUEST
+});
+
+export const deleteFromS3Success = (recordingId) => ({
+  type: types.DELETE_FROM_S3_SUCCESS,
+  payload: recordingId
+});
+
+export const deleteFromS3Failure = (err) => ({
+  type: types.DELETE_FROM_S3_FAILURE,
+  payload: err
 });
 
 export const fetchUserRecordings = (user) => {
