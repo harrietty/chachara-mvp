@@ -85,7 +85,7 @@ export const fetchQuestionsError = (err) => ({
 export const uploadToS3 = (buf, uri, user, questionId, length) => {
   return (dispatch) => {
     dispatch(uploadToS3Request());
-    return Storage.put('somefile.caf', buf)
+    return Storage.put(`${user.username}-${new Date().getTime()}.caf`, buf)
       .then((res) => {
         console.log('Successfully uploaded file to S3');
         const filename = res.key;
