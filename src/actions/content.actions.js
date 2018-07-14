@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { API_ROOT } from 'react-native-dotenv';
+import { API_ROOT, ENVIRONMENT } from 'react-native-dotenv';
 import { Storage } from 'aws-amplify';
 import { AsyncStorage } from 'react-native';
 import { FileSystem } from 'expo';
@@ -48,8 +48,12 @@ export const fetchQuestions = () => {
           time: new Date().getTime()
         }));
       })
-      .catch(() => {
-        dispatch(fetchQuestionsError('Unable to fetch questions'));
+      .catch((err) => {
+        if (err && err.message === 'Network request failed') {
+          ENVIRONMENT === 'development' ?
+            dispatch(fetchQuestionsError('No network connection. Is the local API running?')) :
+            dispatch(fetchQuestionsError('Unable to load questions - no network connection.'));
+        }
       });
   };
 };
@@ -176,8 +180,11 @@ export const fetchUserRecordings = (user) => {
         dispatch(fetchUserRecordingsSuccess((res.recordings || [])));
       })
       .catch(err => {
-        console.log('Error fetching recordings', err);
-        dispatch(fetchUserRecordingsFailure('Unable to fetch user recordings'));
+        if (err && err.message === 'Network request failed') {
+          ENVIRONMENT === 'development' ?
+            dispatch(fetchUserRecordingsFailure('No network connection. Is the local API running?')) :
+            dispatch(fetchUserRecordingsFailure('Unable to load recordings - no network connection.'));
+        }
       });
   };
 };
