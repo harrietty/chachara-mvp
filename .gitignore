@@ -27,3 +27,7 @@ awsmobilejs/.awsmobile/backend-build
 awsmobilejs/\#current-backend-info
 ~awsmobilejs-*/
 .amplify.config.js
+
+.env.production
+.env.development
+.env

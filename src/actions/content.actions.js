@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { API_ROOT } from 'react-native-dotenv';
 import { Storage } from 'aws-amplify';
 import { AsyncStorage } from 'react-native';
 import { FileSystem } from 'expo';
@@ -7,9 +8,6 @@ import * as types from '../types';
 import userConfig from '../user-config';
 
 import Expo from 'expo';
-
-const API_ROOT = 'http://localhost:3000';
-const PROD_API_ROOT = 'https://e086imwdd1.execute-api.eu-west-1.amazonaws.com/latest/';
 
 export async function loadAudio(uri) {
   const soundObject = new Expo.Audio.Sound();
