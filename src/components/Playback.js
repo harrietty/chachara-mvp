@@ -21,13 +21,23 @@ class Playback extends React.Component {
   }
 
   async componentDidMount () {
+    console.log('mounted playback');
     const recording = this.props.navigation.getParam('recording', {});
+    console.log('recording:', recording);
     await this.setMostRecentRecordingSound(recording);
   }
 
   componentDidUpdate () {
     if (this.props.uploadStatus === 'success') {
       this.props.navigation.navigate('QuestionList');
+    }
+  }
+
+  async componentWillUnmount () {
+    console.log('unmounting', this.state);
+    if (this.state.sound) {
+      console.log('unmounting playback screen');
+      await this.state.sound.unloadAsync();
     }
   }
 
@@ -40,6 +50,8 @@ class Playback extends React.Component {
       volume: 1.0,
       rate: 1.0
     }, (status) => {
+      console.log('**********', status);
+      if (status.isLoaded === false) return;
       if (status.isLoaded && !this.state.isLoaded) {
         this.setState({
           isLoaded: true,

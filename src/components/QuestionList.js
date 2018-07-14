@@ -22,6 +22,7 @@ class QuestionList extends React.Component {
   }
 
   async componentDidMount() {
+    console.log('Mounting questionlist');
     const {LANG} = userConfig;
     const cachedQuestions = JSON.parse(await AsyncStorage.getItem(`QUESTIONS-${LANG}`));
     const DAY_SECONDS = 86400;

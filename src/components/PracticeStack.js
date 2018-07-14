@@ -1,5 +1,5 @@
 import {createStackNavigator} from 'react-navigation';
-import QuestionList from './QuestionList';
+import QuestionList from './Questions/Main';
 import ChooseLength from './ChooseLength';
 import Playback from './Playback';
 

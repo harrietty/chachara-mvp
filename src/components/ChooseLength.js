@@ -62,6 +62,7 @@ export default class ChooseLength extends React.Component {
 
   moveToPlayback = (recording) => {
     const question = this.props.navigation.getParam('question', {});
+    console.log('Moving to playback');
     this.props.navigation.navigate('Playback', {recording, question});
   }
 
