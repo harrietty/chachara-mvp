@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { fetchUserRecordings, deleteFromS3 } from '../actions/content.actions';
 import MyRecordingItem from './MyRecordingItem';
 import Spinner from '../reusable/Spinner';
+import Error from '../reusable/Error';
 
 import common from '../styles/common';
 import app from '../stylesNew/app';
@@ -22,9 +23,12 @@ class UserProfile extends React.Component {
   }
 
   render () {
-    const { recordings, deleteFromS3, user, loading } = this.props;
+    const { recordings, deleteFromS3, user, loading, error } = this.props;
     if (loading) return (
       <Spinner />
+    );
+    else if (error) return (
+      <Error header='My Recordings'>{error}</Error>
     );
     else return (
       <ImageBackground source={require('../img/bg-faded.jpg')} style={{flex: 1}}>
@@ -46,6 +50,7 @@ class UserProfile extends React.Component {
 
   static propTypes = {
     recordings: PropTypes.array.isRequired,
+    error: PropTypes.string,
     user: PropTypes.object.isRequired,
     fetchUserRecordings: PropTypes.func.isRequired,
     deleteFromS3: PropTypes.func.isRequired,
@@ -56,7 +61,8 @@ class UserProfile extends React.Component {
 const mapStateToProps = (state) => ({
   user: state.auth.user,
   recordings: state.userRecordings.recordings,
-  loading: state.userRecordings.loading
+  loading: state.userRecordings.loading,
+  error: state.userRecordings.error
 });
 
 const mapDispatchToProps = (dispatch) => ({

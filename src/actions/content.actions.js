@@ -36,6 +36,7 @@ export async function downloadAudioFile(sourceUri, destinationUri) {
 export const fetchQuestions = () => {
   const {LANG} = userConfig;
   return dispatch => {
+    console.log('fetching from network');
     dispatch(fetchQuestionsRequest());
     return fetch(`${API_ROOT}/languages/${LANG}/questions`)
       .then(res => res.json())
@@ -50,7 +51,7 @@ export const fetchQuestions = () => {
         }));
       })
       .catch(() => {
-        dispatch(fetchQuestionsError('Could not load questions'));
+        dispatch(fetchQuestionsError('Unable to fetch questions'));
       });
   };
 };

@@ -8,6 +8,7 @@ import userConfig from '../user-config';
 
 import RecordButton from './RecordButton';
 import Spinner from '../reusable/Spinner';
+import Error from '../reusable/Error';
 
 import common from '../styles/common';
 import question from '../styles/question';
@@ -46,8 +47,11 @@ class QuestionList extends React.Component {
   }
 
   render () {
-    const { questions, questionsLoading, userRecordingsByQuestionId } = this.props;
-    return (
+    const { questions, questionsLoading, userRecordingsByQuestionId, error } = this.props;
+    if (error) return (
+      <Error header='Practice'>{error}</Error>
+    );
+    else return (
       <ImageBackground source={require('../img/bg-faded.jpg')} style={{flex: 1}}>
         <View style={app.container}>
           <View style={common.inAppHeaderArea}>
@@ -74,6 +78,7 @@ class QuestionList extends React.Component {
   static propTypes = {
     user: PropTypes.object,
     questions: PropTypes.object.isRequired,
+    error: PropTypes.string,
     userRecordingsByQuestionId: PropTypes.object.isRequired,
     fetchQuestions: PropTypes.func.isRequired,
     getQuestionsFromStorage: PropTypes.func.isRequired,
@@ -87,6 +92,7 @@ class QuestionList extends React.Component {
 const mapStateToProps = ({ auth, content, userRecordings }) => ({
   user: auth.user,
   questions: content.questions,
+  error: content.loadQuestionsError,
   questionsLoading: content.questionsLoading,
   recordingsAvailable: userRecordings.recordings.length > 0,
   userRecordingsByQuestionId: userRecordings.recordings.reduce((acc, r) => {
