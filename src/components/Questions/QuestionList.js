@@ -8,13 +8,22 @@ import style from '../../stylesNew/questionList';
 
 class QuestionList extends React.Component {
   render () {
-    const { questions, userRecordingsByQuestionId } = this.props;
+    const {
+      questions,
+      userRecordingsByQuestionId,
+      goToRecordingScreen,
+    } = this.props;
     return (
       <View style={{flex: 1}}>
         <ScrollView contentContainerStyle={style.scrollContainer}>
           {Object.keys(questions).map((id, i) => {
             if (!userRecordingsByQuestionId[id]) {
-              return <QuestionItem key={i} question={questions[id]} />;
+              return (
+                <QuestionItem
+                  key={i}
+                  question={questions[id]}
+                  goToRecordingScreen={goToRecordingScreen} />
+              );
             }
           })}
         </ScrollView>
@@ -33,7 +42,8 @@ const mapStateToProps = ({ content, userRecordings }) => ({
 
 QuestionList.propTypes = {
   questions: PropTypes.object.isRequired,
-  userRecordingsByQuestionId: PropTypes.object.isRequired
+  userRecordingsByQuestionId: PropTypes.object.isRequired,
+  goToRecordingScreen: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps)(QuestionList);

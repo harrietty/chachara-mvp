@@ -1,27 +1,27 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { View, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { View, Text, TouchableOpacity } from 'react-native';
 
-import FlagIcon from '../../reusable/FlagIcon';
+import QuestionDetail from '../../reusable/QuestionDetail';
+
 import style from '../../stylesNew/questionList';
 
 export default function QuestionItem (props) {
   return (
-    <View style={style.itemContainer}>
-      <View style={{justifyContent: 'center', flex: 5}}>
-        <Text style={style.squareBoxText}>
-          {props.question.text}
-        </Text>
+    <TouchableOpacity onPress={() => props.goToRecordingScreen(props.question)}>
+      <View style={style.itemContainer}>
+        <View style={{justifyContent: 'center', flex: 5}}>
+          <Text style={style.squareBoxText}>
+            {props.question.text}
+          </Text>
+        </View>
+        <QuestionDetail question={props.question} />
       </View>
-      <View style={style.boxBottom}>
-        <Icon name='airplane-takeoff' size={25} color='#FFA600' />;
-        <FlagIcon flag='es' />
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 QuestionItem.propTypes = {
-  question: PropTypes.object.isRequired
+  question: PropTypes.object.isRequired,
+  goToRecordingScreen: PropTypes.func.isRequired,
 };

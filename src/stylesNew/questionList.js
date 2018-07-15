@@ -34,7 +34,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    flex: 1,
+    height: 20,
     margin: 10,
     width: '90%'
   }

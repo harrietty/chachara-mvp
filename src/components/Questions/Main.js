@@ -35,11 +35,15 @@ class Main extends React.Component {
     return today - s;
   }
 
+  goToRecordingScreen = (question) => {
+    this.props.navigation.navigate('RecordingScreen', {question});
+  }
+
   render () {
     const { loading, error } = this.props;
     return (
       <Layout loading={loading} header='Practice' error={error}>
-        <QuestionList />
+        <QuestionList goToRecordingScreen={this.goToRecordingScreen} />
       </Layout>
     );
   }
@@ -52,6 +56,7 @@ class Main extends React.Component {
     fetchUserRecordings: PropTypes.func.isRequired,
     recordingsAvailable: PropTypes.bool.isRequired,
     user: PropTypes.object.isRequired,
+    navigation: PropTypes.object.isRequired,
   }
 }
 

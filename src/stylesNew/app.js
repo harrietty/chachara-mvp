@@ -28,5 +28,19 @@ export default StyleSheet.create({
   errorText: {
     fontSize: 24,
     fontFamily: 'Avenir-Light',
+  },
+  largeButtonContainer: {
+    height: 70,
+    width: 250,
+    margin: 10,
+    backgroundColor: '#FFA600',
+    borderRadius: 25,
+  },
+  largeButtonText: {
+    fontSize: 40,
+    color: '#434545',
+    textAlign: 'center',
+    lineHeight: 70,
+    fontFamily: 'Avenir-Light' 
   }
 });
