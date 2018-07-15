@@ -4,13 +4,14 @@ import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import QuestionItem from './QuestionItem';
+import style from '../../stylesNew/questionList';
 
 class QuestionList extends React.Component {
   render () {
     const { questions, userRecordingsByQuestionId } = this.props;
     return (
       <View style={{flex: 1}}>
-        <ScrollView contentContainerStyle={{flexDirection: 'row', justifyContent: 'space-around', flexWrap: 'wrap'}}>
+        <ScrollView contentContainerStyle={style.scrollContainer}>
           {Object.keys(questions).map((id, i) => {
             if (!userRecordingsByQuestionId[id]) {
               return <QuestionItem key={i} question={questions[id]} />;
