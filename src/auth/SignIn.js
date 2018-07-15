@@ -65,7 +65,7 @@ class SignIn extends React.Component {
       <ImageBackground source={require('../img/bg.jpg')} style={auth.background}>
         <KeyboardAvoidingView style={auth.keyboardView} enabled behavior='padding'>
           <View style={auth.header}>
-            <Icon name={'ios-chatbubbles'} size={45} color='#2E2E28' />;
+            <Icon name={'ios-chatbubbles'} size={45} color='#616E7F' />;
             <Text style={auth.headerText}>Chachara</Text>
           </View>
           <View style={{alignItems: 'center'}}>

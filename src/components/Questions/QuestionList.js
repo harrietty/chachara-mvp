@@ -1,21 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
+
+import QuestionItem from './QuestionItem';
 
 class QuestionList extends React.Component {
   render () {
     const { questions, userRecordingsByQuestionId } = this.props;
     return (
-      <View>
-        {Object.keys(questions).map((id, i) => {
-          let q = questions[id];
-          if (!userRecordingsByQuestionId[id]) return (
-            <View key={i}>
-              <Text>{q.text}</Text>);
-            </View>
-          );
-        })}
+      <View style={{flex: 1}}>
+        <ScrollView contentContainerStyle={{flexDirection: 'row', justifyContent: 'space-around', flexWrap: 'wrap'}}>
+          {Object.keys(questions).map((id, i) => {
+            if (!userRecordingsByQuestionId[id]) {
+              return <QuestionItem key={i} question={questions[id]} />;
+            }
+          })}
+        </ScrollView>
       </View>
     );
   }

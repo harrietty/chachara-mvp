@@ -46,7 +46,7 @@ export default StyleSheet.create({
     height: 50,
     width: 250,
     margin: 10,
-    backgroundColor: '#AFDBDB',
+    backgroundColor: '#FFA600',
     borderRadius: 25,
   },
   buttonText: {

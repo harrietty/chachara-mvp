@@ -14,11 +14,12 @@ export default StyleSheet.create({
   mainArea: {
     flex: 5,
     alignItems: 'center',
+    height: '100%'
   },
   header: {
-    fontFamily: 'Avenir-Light',
-    fontSize: 35,
-    color: '#B2646F'
+    fontFamily: 'AvenirNext-UltraLight',
+    fontSize: 45,
+    color: '#242312'
   },
   text: {
     fontFamily: 'AvenirNext-Regular',
