@@ -127,7 +127,7 @@ export default class RecordingArea extends React.Component {
           backgroundColor="#F5E6E8">
           {() => (
             <StopStartButton
-              hasStarted={this.state.time > 0}
+              hasStarted={this.props.hasStarted}
               beginRecording={this.beginRecording}
               continueRecording={this.continueRecording}
               pauseRecording={this.pauseRecording}
@@ -141,8 +141,6 @@ export default class RecordingArea extends React.Component {
   }
 
   static propTypes = {
-    disableButtons: PropTypes.func.isRequired,
-    selectedTime: PropTypes.number.isRequired,
-    moveToPlayback: PropTypes.func.isRequired,
+    hasStarted: PropTypes.bool.isRequired
   }
 }
