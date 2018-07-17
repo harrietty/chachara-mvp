@@ -2,11 +2,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Audio } from 'expo';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import QuestionDetail from '../../reusable/QuestionDetail';
 import AnimatedSequence from './AnimatedSequence';
 import Slider from './Slider';
 import RecordingProgressIndicator from './RecordingProgressIndicator';
+
+import Button from '../../reusable/Button';
 
 import style from '../../stylesNew/app';
 
@@ -32,7 +35,7 @@ const getAudioConfig = (mode) => {
 
 export default class RecordingScreen extends React.Component {
   state = {
-    speakingTime: 120,
+    speakingTime: 5,
     elapsedRecordingTime: 0,
     modalVisible: true,
     animationComplete: false,
@@ -40,7 +43,11 @@ export default class RecordingScreen extends React.Component {
     isRecording: false,
     error: null,
     intervalId: null,
-    finished: false
+    finished: false,
+    playbackIsLoaded: false,
+    totalRecordingLength: 0,
+    soundPosition: 0,
+    isPlaying: false
   }
 
   updateSpeakingTime = (value) => {
@@ -122,15 +129,77 @@ export default class RecordingScreen extends React.Component {
         error
       });
     }
-
+    
+    await Audio.setAudioModeAsync(getAudioConfig('PLAYBACK'));
+    await this.setMostRecentRecordingSound();
+    
     this.setState({
       isRecording: false,
       intervalId: null,
       finished: true
     });
-    
-    await Audio.setAudioModeAsync(getAudioConfig('PLAYBACK'));
-    // this.props.moveToPlayback(this.recording);
+  }
+
+  setMostRecentRecordingSound = async () => {
+    const {
+      sound
+    } = await this.state.recording.createNewLoadedSound({
+      isLooping: false,
+      isMuted: false,
+      volume: 1.0,
+      rate: 1.0
+    }, (status) => {
+      if (status.isLoaded && !this.state.isLoaded) {
+        this.setState({
+          playbackIsLoaded: true,
+          totalRecordingLength: status.playableDurationMillis,
+        });
+      }
+      this.setState({
+        soundPosition: status.positionMillis || 0
+      });
+      if (status.didJustFinish) {
+        this.state.sound.setPositionAsync(0);
+        this.setState({
+          isPlaying: false,
+          soundPosition: 0
+        });
+      }
+    });
+    this.setState({
+      sound
+    });
+  }
+
+  playPauseSound = async () => {
+    if (!this.state.sound) {
+      await this.setMostRecentRecordingSound(this.state.recording);
+    }
+    const { isPlaying, sound } = this.state;
+    if (isPlaying) {
+      sound.pauseAsync();
+      this.setState({
+        isPlaying: false
+      });
+    } else {
+      sound.playAsync();
+      this.setState({
+        isPlaying: true
+      });
+    }
+  }
+
+  renderFinishedScreen = () => {
+    const { isPlaying } = this.state;
+    return (
+      <View>
+        <TouchableOpacity onPress={this.playPauseSound} style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
+          <Icon name={isPlaying ? 'pause' : 'play'} size={50} color='#CCC4C5' />
+        </TouchableOpacity>
+        <Button>Save</Button>
+        <Button>Discard</Button>
+      </View>
+    );
   }
 
   render () {
@@ -153,14 +222,14 @@ export default class RecordingScreen extends React.Component {
                 onAnimationEnd={this.startRecording}
               />}
 
-              {this.state.animationComplete && <RecordingProgressIndicator 
+              {this.state.animationComplete && !this.state.finished && <RecordingProgressIndicator 
                 isRecording={this.state.isRecording}
                 finished={this.state.finished}
                 continueRecording={this.continueRecording}
                 pauseRecording={this.pauseRecording}
                 currentRecordingProgress={currentRecordingProgress}
               />}
-              {this.state.finished && <Text>Recording finished</Text>}
+              {this.state.finished && this.renderFinishedScreen()}
             </View>
           </View>
         </Modal>
