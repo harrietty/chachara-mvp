@@ -23,12 +23,9 @@ class UserProfile extends React.Component {
   }
 
   render () {
-    const { recordings, deleteFromS3, user, loading, error } = this.props;
+    const { recordings, deleteFromS3, user, loading } = this.props;
     if (loading) return (
       <Spinner />
-    );
-    else if (error) return (
-      <Error header='My Recordings'>{error}</Error>
     );
     else return (
       <ImageBackground source={require('../img/bg-faded.jpg')} style={{flex: 1}}>
@@ -50,7 +47,6 @@ class UserProfile extends React.Component {
 
   static propTypes = {
     recordings: PropTypes.array.isRequired,
-    error: PropTypes.string,
     user: PropTypes.object.isRequired,
     fetchUserRecordings: PropTypes.func.isRequired,
     deleteFromS3: PropTypes.func.isRequired,
@@ -62,7 +58,6 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
   recordings: state.userRecordings.recordings,
   loading: state.userRecordings.loading,
-  error: state.userRecordings.error
 });
 
 const mapDispatchToProps = (dispatch) => ({
