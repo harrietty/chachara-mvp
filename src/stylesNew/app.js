@@ -25,6 +25,11 @@ export default StyleSheet.create({
     fontFamily: 'AvenirNext-Regular',
     fontSize: 18,
   },
+  whiteText: {
+    fontFamily: 'AvenirNext-Regular',
+    fontSize: 18,
+    color: 'white',
+  },
   errorText: {
     fontSize: 24,
     fontFamily: 'Avenir-Light',

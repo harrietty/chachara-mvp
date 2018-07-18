@@ -209,6 +209,15 @@ class RecordingScreen extends React.Component {
           Done
         </Button>
       );
+    } else if (uploadStatus === 'failure') {
+      return (
+        <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+          <Text style={style.whiteText}>We&apos;re sorry, something went wrong.</Text>
+          <Button _onPressButton={this.goBackToQuestionList}>
+            Try again
+          </Button>
+        </View>
+      );
     } else {
       return (
         <View>
