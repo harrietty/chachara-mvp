@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Audio } from 'expo';
+import { Audio, FileSystem } from 'expo';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -197,9 +197,27 @@ export default class RecordingScreen extends React.Component {
           <Icon name={isPlaying ? 'pause' : 'play'} size={50} color='#CCC4C5' />
         </TouchableOpacity>
         <Button>Save</Button>
-        <Button>Discard</Button>
+        <Button _onPressButton={this.discardSound}>Discard</Button>
       </View>
     );
+  }
+
+  discardSound = async () => {
+    await FileSystem.deleteAsync(this.state.recording._uri);
+    this.setState({
+      speakingTime: 5,
+      elapsedRecordingTime: 0,
+      modalVisible: false,
+      animationComplete: false,
+      recording: null,
+      isRecording: false,
+      error: null,
+      finished: false,
+      playbackIsLoaded: false,
+      totalRecordingLength: 0,
+      soundPosition: 0,
+      isPlaying: false
+    });
   }
 
   render () {
