@@ -24,6 +24,13 @@ export default (state = initialState, action) => {
       uploadStatus: 'success',
     };
   }
+  
+  else if (action.type === types.ACKNOWLEDGE_SUCCESS) {
+    return {
+      ...state,
+      uploadStatus: null,
+    };
+  }
 
   else if (action.type === types.UPLOAD_TO_S3_FAILURE) {
     return {

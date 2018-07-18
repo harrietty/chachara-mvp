@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Audio, FileSystem } from 'expo';
-import { View, Text, TouchableOpacity, Modal } from 'react-native';
+import { connect } from 'react-redux';
+import { View, Text, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import QuestionDetail from '../../reusable/QuestionDetail';
 import AnimatedSequence from './AnimatedSequence';
 import Slider from './Slider';
 import RecordingProgressIndicator from './RecordingProgressIndicator';
+import { uploadToS3, acknowledgeSuccess } from '../../actions/content.actions';
 
 import Button from '../../reusable/Button';
 
@@ -33,7 +35,7 @@ const getAudioConfig = (mode) => {
   }[mode];
 };
 
-export default class RecordingScreen extends React.Component {
+class RecordingScreen extends React.Component {
   state = {
     speakingTime: 5,
     elapsedRecordingTime: 0,
@@ -49,7 +51,7 @@ export default class RecordingScreen extends React.Component {
     soundPosition: 0,
     isPlaying: false
   }
-
+  
   updateSpeakingTime = (value) => {
     this.setState({
       speakingTime: value
@@ -189,17 +191,48 @@ export default class RecordingScreen extends React.Component {
     }
   }
 
+  goBackToQuestionList = () => {
+    this.props.acknowledgeSuccess();
+    this.props.navigation.navigate('QuestionList');
+  }
+
   renderFinishedScreen = () => {
     const { isPlaying } = this.state;
-    return (
-      <View>
-        <TouchableOpacity onPress={this.playPauseSound} style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
-          <Icon name={isPlaying ? 'pause' : 'play'} size={50} color='#CCC4C5' />
-        </TouchableOpacity>
-        <Button>Save</Button>
-        <Button _onPressButton={this.discardSound}>Discard</Button>
-      </View>
-    );
+    const { isUploading, uploadStatus } = this.props;
+    if (isUploading) {
+      return (
+        <ActivityIndicator size='large' color = '#CCC4C5' />
+      );
+    } else if (uploadStatus === 'success') {
+      return (
+        <Button _onPressButton={this.goBackToQuestionList}>
+          Done
+        </Button>
+      );
+    } else {
+      return (
+        <View>
+          <TouchableOpacity onPress={this.playPauseSound} style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
+            <Icon name={isPlaying ? 'pause' : 'play'} size={50} color='#CCC4C5' />
+          </TouchableOpacity>
+          <Button _onPressButton={this.saveSound}>Save</Button>
+          <Button _onPressButton={this.discardSound}>Discard</Button>
+        </View>
+      );
+    }
+  }
+
+  saveSound = async () => {
+    const recording = this.state.recording;
+    const question = this.props.navigation.getParam('question', {});
+    const user = this.props.user;
+
+    const { uri } = await FileSystem.getInfoAsync(recording.getURI());
+    fetch(uri)
+      .then(response => response.blob())
+      .then(buffer => {
+        this.props.uploadToS3(buffer, uri, user, question._id, recording._finalDurationMillis);
+      });
   }
 
   discardSound = async () => {
@@ -280,5 +313,27 @@ export default class RecordingScreen extends React.Component {
 
   static propTypes = {
     navigation: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+    uploadToS3: PropTypes.func.isRequired,
+    acknowledgeSuccess: PropTypes.func.isRequired,
+    isUploading: PropTypes.bool.isRequired,
+    uploadStatus: PropTypes.string,
   }
 }
+
+const mapStateToProps = ({ auth, content }) => ({
+  user: auth.user,
+  isUploading: content.isUploading,
+  uploadStatus: content.uploadStatus,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  uploadToS3: (buffer, uri, user, questionId, length) => {
+    dispatch(uploadToS3(buffer, uri, user, questionId, length));
+  },
+  acknowledgeSuccess: () => {
+    dispatch(acknowledgeSuccess());
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecordingScreen);

@@ -135,6 +135,10 @@ export const uploadToS3Failure = () => ({
   type: types.UPLOAD_TO_S3_FAILURE,
 });
 
+export const acknowledgeSuccess = () => ({
+  type: types.ACKNOWLEDGE_SUCCESS,
+});
+
 export const deleteFromS3 = (recordingFilename, recordingId, user) => {
   return (dispatch) => {
     dispatch(deleteFromS3Request());
