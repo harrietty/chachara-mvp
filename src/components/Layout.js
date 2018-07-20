@@ -31,7 +31,7 @@ export default class Layout extends React.Component {
   static propTypes = {
     header: PropTypes.string.isRequired,
     error: PropTypes.string,
-    children: PropTypes.object.isRequired,
+    children: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
     loading: PropTypes.bool.isRequired,
   }
 }

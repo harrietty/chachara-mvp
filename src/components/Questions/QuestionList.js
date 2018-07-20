@@ -13,6 +13,7 @@ class QuestionList extends React.Component {
       userRecordingsByQuestionId,
       goToRecordingScreen,
     } = this.props;
+
     return (
       <View style={{flex: 1}}>
         <ScrollView contentContainerStyle={style.scrollContainer}>
