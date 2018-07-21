@@ -58,10 +58,10 @@ class Main extends React.Component {
   }
 
   render () {
-    const { loading, error, recordingsAvailable } = this.props;
+    const { loading, error, recordingsLoading } = this.props;
     if (this.state.permissionToRecord) return (
       <Layout loading={loading} header='Practice' error={error}>
-        {recordingsAvailable && <QuestionList goToRecordingScreen={this.goToRecordingScreen} />}
+        {!recordingsLoading && <QuestionList goToRecordingScreen={this.goToRecordingScreen} />}
       </Layout>
     );
     else return null;
@@ -73,7 +73,7 @@ class Main extends React.Component {
     fetchQuestions: PropTypes.func.isRequired,
     getQuestionsFromStorage: PropTypes.func.isRequired,
     fetchUserRecordings: PropTypes.func.isRequired,
-    recordingsAvailable: PropTypes.bool.isRequired,
+    recordingsLoading: PropTypes.bool.isRequired,
     user: PropTypes.object.isRequired,
     navigation: PropTypes.object.isRequired,
   }
@@ -82,7 +82,7 @@ class Main extends React.Component {
 const mapStateToProps = ({ content, userRecordings, auth }) => ({
   error: content.loadQuestionsError,
   loading: content.questionsLoading,
-  recordingsAvailable: userRecordings.recordings.length > 0,
+  recordingsLoading: userRecordings.loading,
   user: auth.user,
 });
 

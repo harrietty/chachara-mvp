@@ -5,6 +5,7 @@ import signIn from './signIn';
 import signUp from './signUp';
 import confirm from './confirm';
 import userRecordings from './userRecordings';
+import profile from './profile';
 
 export default combineReducers({
   auth,
@@ -13,4 +14,5 @@ export default combineReducers({
   content,
   confirm,
   userRecordings,
+  profile,
 });

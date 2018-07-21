@@ -1,4 +1,4 @@
-import { Auth } from 'aws-amplify';
+import { Auth, API } from 'aws-amplify';
 import { API_ROOT } from 'react-native-dotenv';
 import * as types from '../types';
 
@@ -72,6 +72,16 @@ export const signIn = (username, password) => {
       .then((cognitoUser) => {
         const user = cleanUpCognitoUser(cognitoUser);
         dispatch(signInSuccess(user));
+        return fetch(`${API_ROOT}/users/${user.id}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': user.idToken
+          }
+        });
+      })
+      .then(res => res.json())
+      .then(res => {
+        dispatch(fetchDbUserSuccess(res.user));
       })
       .then(() => dispatch(getUserCredentials()))
       .catch((err) => {
@@ -83,6 +93,11 @@ export const signIn = (username, password) => {
       });
   };
 };
+
+export const fetchDbUserSuccess = (user) => ({
+  type: types.FETCH_DB_USER_SUCCESS,
+  payload: user
+});
 
 export const signInSuccess = (user) => {
   return {
