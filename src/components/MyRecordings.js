@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { fetchUserRecordings, deleteFromS3 } from '../actions/content.actions';
 import MyRecordingItem from './MyRecordingItem';
 import Spinner from '../reusable/Spinner';
-import Error from '../reusable/Error';
 
 import common from '../styles/common';
 import app from '../stylesNew/app';

@@ -18,4 +18,4 @@ export default function QuestionDetail (props) {
 
 QuestionDetail.propTypes = {
   question: PropTypes.object.isRequired,
-}
+};

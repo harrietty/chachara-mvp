@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import AudioRecorder from './AudioRecorder';
 import Button from '../reusable/Button';
-import { uploadToS3, downloadAudioFile, loadAudio } from '../actions/content.actions';
+import { uploadToS3, downloadAudioFile } from '../actions/content.actions';
 
 import common from '../styles/common';
 

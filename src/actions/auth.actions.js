@@ -1,4 +1,5 @@
 import { Auth } from 'aws-amplify';
+import { API_ROOT } from 'react-native-dotenv';
 import * as types from '../types';
 
 export const signUp = (email, password, username) => {
@@ -111,17 +112,37 @@ export const createSignInError = (err) => {
   };
 };
 
-export const checkForAuthenticatedUser = () => {
+export const checkForAuthenticatedUser = (params = {}) => {
   return (dispatch) => {
     dispatch({ type: types.CHECK_AUTHENTICATED_USER_REQUEST });
     return Auth.currentAuthenticatedUser()
       .then((cognitoUser) => {
         const user = cleanUpCognitoUser(cognitoUser);
         dispatch(checkForAuthenticatedUserSuccess(user));
+        return user;
+      })
+      .then(user => {
+        if (params.shouldCreateUser) {
+          return fetch(`${API_ROOT}/users`, {
+            method: 'POST',
+            headers: {
+              Authorization: user.idToken,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: 'Harriet',
+              languages_learning: ['es'],
+              languages_spoken: ['eng'],
+              id: user.id
+            })
+          });
+        } else {
+          return Promise.resolve();
+        }
       })
       .then(() => dispatch(getUserCredentials()))
-      .catch(() => {
-        dispatch({type: types.CHECK_AUTHENTICATED_USER_FAILURE});
+      .catch((err) => {
+        dispatch({type: types.CHECK_AUTHENTICATED_USER_FAILURE, payload: err});
       });
   };
 };
@@ -166,7 +187,9 @@ export const confirmSignUp = (username, code, password) => {
         return Auth.signIn(username, password);
       })
       .then(() => {
-        return checkForAuthenticatedUser();
+        return dispatch(checkForAuthenticatedUser({
+          shouldCreateUser: true
+        }));
       })
       .then(() => {
         dispatch(confirmSignUpSuccess());
