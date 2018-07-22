@@ -6,10 +6,13 @@ export default StyleSheet.create({
     flex: 1
   },
   inAppHeaderArea: {
-    flex: 1,
-    padding: 20,
+    flex: 0.6,
+    paddingTop: 40,
+    paddingRight: 10,
+    paddingLeft: 10,
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   mainArea: {
     flex: 5,

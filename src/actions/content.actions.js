@@ -93,7 +93,9 @@ export const uploadToS3 = (buf, uri, user, questionId, length) => {
       .then((res) => {
         console.log('Successfully uploaded file to S3');
         const filename = res.key;
-        return fetch(`${API_ROOT}/users/${user.id}/recordings`, {
+        const url = `${API_ROOT}/users/${user.id}/recordings`;
+        console.log({url});
+        return fetch(url, {
           method: 'POST',
           headers: {
             Authorization: user.idToken,

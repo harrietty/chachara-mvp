@@ -33,8 +33,8 @@ class Main extends React.Component {
   async componentDidMount () {
     await this.askForPermissionToRecord();
     const { LANG } = userConfig;
-    const cachedQuestions = JSON.parse(await AsyncStorage.getItem(`QUESTIONS-${LANG}`));
-    // const cachedQuestions = null;
+    // const cachedQuestions = JSON.parse(await AsyncStorage.getItem(`QUESTIONS-${LANG}`));
+    const cachedQuestions = null;
     const DAY_SECONDS = 86400;
     if (cachedQuestions && this.getAge(cachedQuestions.time) < DAY_SECONDS) {
       this.props.getQuestionsFromStorage();
@@ -42,6 +42,7 @@ class Main extends React.Component {
       this.props.fetchQuestions();
     }
 
+    // TODO: fix this?
     if (!this.props.recordingsAvailable) {
       this.props.fetchUserRecordings(this.props.user);
     }
