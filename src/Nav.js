@@ -5,11 +5,11 @@ import { createBottomTabNavigator } from 'react-navigation';
 import Feed from './components/Feed';
 import MyRecordings from './components/MyRecordings';
 import PracticeStack from './components/PracticeStack';
-import Settings from './components/Settings';
+import Profile from './components/Profile';
 
 const iconForRoutes = {
   'Feed': 'home',
-  'Settings': 'cogs',
+  'Profile': 'user',
   'Practice': 'microphone',
   'Recordings': 'list-ul'
 };
@@ -39,7 +39,7 @@ export default createBottomTabNavigator(
     Feed: Feed,
     Practice: PracticeStack,
     Recordings: MyRecordings,
-    Settings: Settings,
+    Profile: Profile,
   },
   {
     navigationOptions: NavComponent,

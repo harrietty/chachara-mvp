@@ -7,10 +7,10 @@ import SignOutButton from '../reusable/SignOutButton';
 import common from '../styles/common';
 import app from '../stylesNew/app';
 
-export default class Settings extends React.Component {
+export default class Profile extends React.Component {
   static navigationOptions () {
     return {
-      title: 'Settings',
+      title: 'Profile',
     };
   }
 
@@ -19,7 +19,7 @@ export default class Settings extends React.Component {
       <ImageBackground source={require('../img/bg-faded.jpg')} style={{flex: 1}}>
         <View style={app.container}>
           <View style={common.inAppHeaderArea}>
-            <Text style={common.header}>Settings</Text>
+            <Text style={common.header}>Profile</Text>
           </View>
           <View style={common.mainArea}>
             <SignOutButton />
@@ -30,6 +30,6 @@ export default class Settings extends React.Component {
   }
 }
 
-Settings.propTypes = {
+Profile.propTypes = {
   navigation: PropTypes.object.isRequired,
 };
