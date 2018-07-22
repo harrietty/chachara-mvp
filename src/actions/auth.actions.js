@@ -155,6 +155,8 @@ export const checkForAuthenticatedUser = (params = {}) => {
           return Promise.resolve();
         }
       })
+      .then(res => res && res.json())
+      .then(res => res && dispatch(fetchDbUserSuccess(res.user)))
       .then(() => dispatch(getUserCredentials()))
       .catch((err) => {
         dispatch({type: types.CHECK_AUTHENTICATED_USER_FAILURE, payload: err});
