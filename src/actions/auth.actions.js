@@ -152,7 +152,12 @@ export const checkForAuthenticatedUser = (params = {}) => {
             })
           });
         } else {
-          return Promise.resolve();
+          return fetch(`${API_ROOT}/users/${user.id}`, {
+            method: 'GET',
+            headers: {
+              Authorization: user.idToken,
+            }
+          });
         }
       })
       .then(res => res && res.json())
