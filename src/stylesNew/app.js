@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     justifyContent: 'space-around',
-    flex: 1
+    flex: 1,
+    backgroundColor: '#A5E8D8',
   },
   inAppHeaderArea: {
     flex: 0.6,

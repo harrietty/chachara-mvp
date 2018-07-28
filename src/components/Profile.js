@@ -5,6 +5,10 @@ import { connect } from 'react-redux';
 
 import { signOut } from '../actions/auth.actions';
 
+import LanguageFlagCircle from './Profile/LanguageFlagCircle';
+import AddMore from './Profile/AddMore';
+import LanguageSelectModal from './Profile/LanguageSelectModal';
+
 import styles from '../stylesNew/profile';
 import app from '../stylesNew/app';
 
@@ -14,36 +18,61 @@ class Profile extends React.Component {
       title: 'Profile',
     };
   }
+  
+  state = {
+    learningModalShowing: false,
+    speaksModalShowing: false
+  }
+
+  toggleModal = (opt) => () => {
+    this.setState({
+      [`${opt}ModalShowing`]: true
+    });
+  }
 
   render () {
     const { profile } = this.props;
     return (
-      <ImageBackground source={require('../img/bg-faded.jpg')} style={{flex: 1}}>
-        <View style={app.container}>
-          <View style={app.inAppHeaderArea}>
-            <Text style={app.header}>Profile</Text>
-            <View style={{backgroundColor: '#FFA600', borderRadius: 25, padding: 5}}>
-              <TouchableOpacity onPress={this.props.signOut}>
-                <Text style={{paddingLeft: 10, paddingRight: 10, fontFamily: 'AvenirNext-Regular', fontSize: 26, color: '#434545', textAlign: 'center'}}>Log out</Text>
-              </TouchableOpacity>
-            </View>
+      <View style={app.container}>
+        <LanguageSelectModal visible={this.state.speaksModalShowing} opt='speaks' />
+        <LanguageSelectModal visible={this.state.learningModalShowing} opt='learning' />
+
+        <View style={app.inAppHeaderArea}>
+          <Text style={app.header}>Profile</Text>
+          <View style={{backgroundColor: '#FFA600', borderRadius: 25, padding: 5}}>
+            <TouchableOpacity onPress={this.props.signOut}>
+              <Text style={{paddingLeft: 10, paddingRight: 10, fontFamily: 'AvenirNext-Regular', fontSize: 26, color: '#434545', textAlign: 'center'}}>Log out</Text>
+            </TouchableOpacity>
           </View>
-          <View style={app.mainArea}>
-            <View style={{flex: 2}}>
-              <Image source={require('../img/harriet.jpg')} style={{width: 240, height: 240, borderRadius: 120}} />
-              <Text style={{fontFamily: 'AvenirNext-Regular', textAlign: 'center', fontSize: 30, color: '#242312', fontWeight: '500'}}>
-                {profile.name || 'Harriet Ryder'}
-              </Text>
+        </View>
+        <View style={app.mainArea}>
+          <View style={{flex: 2}}>
+            <Image source={require('../img/harriet.jpg')} style={{width: 240, height: 240, borderRadius: 120, borderWidth: 3, borderColor: 'white'}} />
+            <Text style={{fontFamily: 'AvenirNext-Regular', textAlign: 'center', fontSize: 30, color: '#242312', fontWeight: '500'}}>
+              {profile.name || 'Harriet Ryder'}
+            </Text>
 
-              <Text style={{fontFamily: 'AvenirNext-Regular', textAlign: 'center', fontSize: 18, color: '#595959', paddingLeft: 20}}>@{profile.username}</Text>
+            <Text style={{fontFamily: 'AvenirNext-Regular', textAlign: 'center', fontSize: 18, color: '#595959'}}>@{profile.username}</Text>
+          </View>
+
+          <View style={{flex: 2, justifyContent: 'space-around'}}>
+            <View>
+              <Text style={{fontFamily: 'AvenirNext-Regular', fontSize: 30, marginBottom: 20}}>Speaks:</Text>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between', minWidth: 100}}>
+                {profile.languages_spoken.map((lang, i) => <LanguageFlagCircle language={lang} key={i} />)}
+                <AddMore onPress={this.toggleModal('speaks')} />
+              </View>
             </View>
-
-            <View style={{flex: 2, backgroundColor: 'blue'}}>
-              <Text>langs and bio</Text>
+            <View>
+              <Text style={{fontFamily: 'AvenirNext-Regular', fontSize: 30, marginBottom: 20}}>Learning:</Text>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between', minWidth: 100}}>
+                {profile.languages_learning.map((lang, i) => <LanguageFlagCircle language={lang} key={i} />)}
+                <AddMore onPress={this.toggleModal('learning')} />
+              </View>
             </View>
           </View>
         </View>
-      </ImageBackground>
+      </View>
     );
   }
 

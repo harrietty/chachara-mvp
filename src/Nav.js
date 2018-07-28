@@ -36,10 +36,11 @@ NavComponent.propTypes = {
 
 export default createBottomTabNavigator(
   {
+    // TODO: put profile back to the end
+    Profile: Profile,
     Feed: Feed,
     Practice: PracticeStack,
     Recordings: MyRecordings,
-    Profile: Profile,
   },
   {
     navigationOptions: NavComponent,

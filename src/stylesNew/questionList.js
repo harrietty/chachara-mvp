@@ -21,7 +21,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#A5E8D8'
+    backgroundColor: '#FCFFF7'
   },
   squareBoxText: {
     fontFamily: 'AvenirNext-Regular',
