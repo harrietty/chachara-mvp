@@ -18,10 +18,17 @@ class Profile extends React.Component {
       title: 'Profile',
     };
   }
-  
+
+  static getDerivedStateFromProps (props, state) {
+    return Object.assign({}, state, {
+      speaksSelectedLanguages: props.profile.languages_spoken,
+      learningSelectedLanguages: props.profile.languages_learning,
+    });
+  }
+
   state = {
     learningModalShowing: false,
-    speaksModalShowing: false
+    speaksModalShowing: false,
   }
 
   toggleModal = (opt) => () => {
@@ -30,19 +37,35 @@ class Profile extends React.Component {
     });
   }
 
+  toggleLanguageChoice = (opt) => (choice) => {
+    let updated;
+    if (this.state[`${opt}SelectedLanguages`].includes(choice)) {
+      updated = this.state[`${opt}SelectedLanguages`].filter(l => l !== choice);
+    } else {
+      updated = this.state[`${opt}SelectedLanguages`].concat([choice]);
+    }
+    this.setState({
+      [`${opt}SelectedLanguages`]: updated
+    });
+  }
+
   render () {
     const { profile } = this.props;
     return (
       <View style={app.container}>
         <LanguageSelectModal
-          selectedLangs={profile.languages_spoken}
+          header='I speak...'
+          selectedLangs={this.state.speaksSelectedLanguages}
           toggleModal={this.toggleModal('speaks')}
+          toggleLanguageChoice={this.toggleLanguageChoice('speaks')}
           visible={this.state.speaksModalShowing}
           opt='speaks'
         />
         <LanguageSelectModal
-          selectedLangs={profile.languages_learning}
+          header='I am learning...'
+          selectedLangs={this.state.learningSelectedLanguages}
           toggleModal={this.toggleModal('learning')}
+          toggleLanguageChoice={this.toggleLanguageChoice('learning')}
           visible={this.state.learningModalShowing}
           opt='learning'
         />
