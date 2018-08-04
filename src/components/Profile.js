@@ -26,7 +26,7 @@ class Profile extends React.Component {
 
   toggleModal = (opt) => () => {
     this.setState({
-      [`${opt}ModalShowing`]: true
+      [`${opt}ModalShowing`]: !this.state[`${opt}ModalShowing`]
     });
   }
 
@@ -34,8 +34,18 @@ class Profile extends React.Component {
     const { profile } = this.props;
     return (
       <View style={app.container}>
-        <LanguageSelectModal visible={this.state.speaksModalShowing} opt='speaks' />
-        <LanguageSelectModal visible={this.state.learningModalShowing} opt='learning' />
+        <LanguageSelectModal
+          selectedLangs={profile.languages_spoken}
+          toggleModal={this.toggleModal('speaks')}
+          visible={this.state.speaksModalShowing}
+          opt='speaks'
+        />
+        <LanguageSelectModal
+          selectedLangs={profile.languages_learning}
+          toggleModal={this.toggleModal('learning')}
+          visible={this.state.learningModalShowing}
+          opt='learning'
+        />
 
         <View style={app.inAppHeaderArea}>
           <Text style={app.header}>Profile</Text>
