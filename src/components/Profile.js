@@ -49,6 +49,16 @@ class Profile extends React.Component {
     });
   }
 
+  saveLanguageChoices = (opt) => () => {
+    const newOpts = opt === 'speaks' ?
+      { languages_spoken: this.state.speaksSelectedLanguages } :
+      { languages_learning: this.state.learningSelectedLanguages };
+    
+    const newProfile = Object.assign({}, this.props.profile, newOpts);
+    this.props.save(newProfile);
+    this.toggleModal(opt)();
+  }
+
   render () {
     const { profile } = this.props;
     return (
@@ -56,7 +66,7 @@ class Profile extends React.Component {
         <LanguageSelectModal
           header='I speak...'
           selectedLangs={this.state.speaksSelectedLanguages}
-          toggleModal={this.toggleModal('speaks')}
+          save={this.saveLanguageChoices('speaks')}
           toggleLanguageChoice={this.toggleLanguageChoice('speaks')}
           visible={this.state.speaksModalShowing}
           opt='speaks'
@@ -64,7 +74,7 @@ class Profile extends React.Component {
         <LanguageSelectModal
           header='I am learning...'
           selectedLangs={this.state.learningSelectedLanguages}
-          toggleModal={this.toggleModal('learning')}
+          save={this.saveLanguageChoices('learning')}
           toggleLanguageChoice={this.toggleLanguageChoice('learning')}
           visible={this.state.learningModalShowing}
           opt='learning'
@@ -113,6 +123,7 @@ class Profile extends React.Component {
     navigation: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
     signOut: PropTypes.func.isRequired,
+    save: PropTypes.func.isRequired,
   }
 }
 
@@ -127,6 +138,9 @@ const mapDispatchToProps = (dispatch) => ({
   signOut: () => {
     dispatch(signOut());
   },
+  save: (profile) => {
+    console.log('saving profile', profile);
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

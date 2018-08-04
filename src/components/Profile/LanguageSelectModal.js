@@ -25,7 +25,7 @@ export default class LanguageSelectModal extends React.Component {
                 return <SupportedLangChoice toggleLanguageChoice={this.props.toggleLanguageChoice} key={i} language={language} selected={selected} />;
               })}
             </View>
-            <Button _onPressButton={this.props.toggleModal}>
+            <Button _onPressButton={this.props.save}>
               Save
             </Button>
           </View>
@@ -36,7 +36,7 @@ export default class LanguageSelectModal extends React.Component {
 
   static propTypes = {
     visible: PropTypes.bool.isRequired,
-    toggleModal: PropTypes.func.isRequired,
+    save: PropTypes.func.isRequired,
     opt: PropTypes.string.isRequired,
     selectedLangs: PropTypes.array.isRequired,
     toggleLanguageChoice: PropTypes.func.isRequired,
