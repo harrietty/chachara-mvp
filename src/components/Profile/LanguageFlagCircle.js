@@ -13,6 +13,8 @@ export default class LanguageFlagCircle extends React.Component {
           width: 50,
           height: 50,
           borderRadius: 25,
+          marginRight: 7,
+          marginLeft: 7,
           resizeMode: 'cover',
         }}
       />

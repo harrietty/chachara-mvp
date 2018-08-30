@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 import { signOut } from '../actions/auth.actions';
+import { updateProfile } from '../actions/profile.actions';
 
 import LanguageFlagCircle from './Profile/LanguageFlagCircle';
 import AddMore from './Profile/AddMore';
@@ -55,7 +56,7 @@ class Profile extends React.Component {
       { languages_learning: this.state.learningSelectedLanguages };
     
     const newProfile = Object.assign({}, this.props.profile, newOpts);
-    this.props.save(newProfile);
+    this.props.save(newProfile, this.props.idToken);
     this.toggleModal(opt)();
   }
 
@@ -100,15 +101,15 @@ class Profile extends React.Component {
 
           <View style={{flex: 2, justifyContent: 'space-around'}}>
             <View>
-              <Text style={{fontFamily: 'AvenirNext-Regular', fontSize: 30, marginBottom: 20}}>Speaks:</Text>
-              <View style={{flexDirection: 'row', justifyContent: 'space-between', minWidth: 100}}>
+              <Text style={{fontFamily: 'AvenirNext-Regular', fontSize: 30, marginBottom: 20, textAlign: 'center'}}>Speaks:</Text>
+              <View style={{flexDirection: 'row', justifyContent: 'center', minWidth: 100}}>
                 {profile.languages_spoken.map((lang, i) => <LanguageFlagCircle language={lang} key={i} />)}
                 <AddMore onPress={this.toggleModal('speaks')} />
               </View>
             </View>
             <View>
-              <Text style={{fontFamily: 'AvenirNext-Regular', fontSize: 30, marginBottom: 20}}>Learning:</Text>
-              <View style={{flexDirection: 'row', justifyContent: 'space-between', minWidth: 100}}>
+              <Text style={{fontFamily: 'AvenirNext-Regular', fontSize: 30, marginBottom: 20, textAlign: 'center'}}>Learning:</Text>
+              <View style={{flexDirection: 'row', justifyContent: 'center', minWidth: 100}}>
                 {profile.languages_learning.map((lang, i) => <LanguageFlagCircle language={lang} key={i} />)}
                 <AddMore onPress={this.toggleModal('learning')} />
               </View>
@@ -124,22 +125,25 @@ class Profile extends React.Component {
     profile: PropTypes.object.isRequired,
     signOut: PropTypes.func.isRequired,
     save: PropTypes.func.isRequired,
+    idToken: PropTypes.string.isRequired,
   }
 }
 
 const mapStateToProps = ({profile, auth}) => ({
   profile: {
-    ...profile,
-    username: auth.user.username
-  }
+    ...profile.data,
+    username: auth.user.username,
+    userId: auth.user.id,
+  },
+  idToken: auth.user.idToken,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   signOut: () => {
     dispatch(signOut());
   },
-  save: (profile) => {
-    console.log('saving profile', profile);
+  save: (profile, idToken) => {
+    dispatch(updateProfile(profile, idToken));
   }
 });
 
